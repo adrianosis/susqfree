@@ -1,0 +1,10 @@
+databaseChangeLog:
+    - changeSet:
+          id: 1-create-doctor-and-specialty-tables
+          author: angelovlima
+          changes:
+              - sqlFile:
+                    path: db/changelog/sql/create_doctor_specialty_tables.sql
+                    encoding: UTF-8
+                    splitStatements: true
+                    endDelimiter: ";"

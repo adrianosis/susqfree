@@ -1,0 +1,33 @@
+spring:
+  application:
+    name: health_unit_management
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/health_unit_management
+    username: postgres
+    password: admin
+
+springdoc:
+  swagger-ui:
+    operationsSorter: method
+
+server:
+  port: 8080
+  # Uncomment to control stack trace inclusion on errors
+  # error:
+  #   include-stacktrace: never
+
+# Actuator
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+  info:
+    env:
+      enabled: true
+info:
+  app:
+    name: Health Unit Management
+    version: 1.0.0
+    description: SUSQFree - Health Unit Management

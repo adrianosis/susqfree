@@ -1,5 +1,6 @@
-package br.com.susqfree.health_unit_management.jpa.entity;
+package br.com.susqfree.health_unit_management.infra.gateway.jpa.entity;
 
+import br.com.susqfree.health_unit_management.domain.model.HealthUnitType;
 import jakarta.persistence.*;
 import lombok.*;
 import java.math.BigDecimal;
@@ -20,13 +21,10 @@ public class HealthUnitEntity {
     @Column(nullable = false, length = 60)
     private String name;
 
-    @Column(nullable = false, length = 20)
-    private String type;
+    @Enumerated(EnumType.STRING)
+    private HealthUnitType type;
 
-    @Column(nullable = false)
-    private Integer capacity;
-
-    @Column(length = 15)
+    @Column(length = 16)
     private String phone;
 
     @Column(nullable = false, length = 60)

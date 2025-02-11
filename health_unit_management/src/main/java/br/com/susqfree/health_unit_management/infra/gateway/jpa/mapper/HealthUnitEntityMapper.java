@@ -1,9 +1,7 @@
-package br.com.susqfree.health_unit_management.jpa.mapper;
+package br.com.susqfree.health_unit_management.infra.gateway.jpa.mapper;
 
 import br.com.susqfree.health_unit_management.domain.model.HealthUnit;
-import br.com.susqfree.health_unit_management.jpa.entity.HealthUnitEntity;
-
-import java.math.BigDecimal;
+import br.com.susqfree.health_unit_management.infra.gateway.jpa.entity.HealthUnitEntity;
 
 public class HealthUnitEntityMapper {
     public static HealthUnitEntity toEntity(HealthUnit healthUnit) {
@@ -11,7 +9,6 @@ public class HealthUnitEntityMapper {
                 .id(healthUnit.getId())
                 .name(healthUnit.getName())
                 .type(healthUnit.getType())
-                .capacity(healthUnit.getCapacity())
                 .phone(healthUnit.getPhone())
                 .street(healthUnit.getStreet())
                 .number(healthUnit.getNumber())
@@ -29,7 +26,6 @@ public class HealthUnitEntityMapper {
                 .id(healthUnitEntity.getId())
                 .name(healthUnitEntity.getName())
                 .type(healthUnitEntity.getType())
-                .capacity(healthUnitEntity.getCapacity())
                 .phone(healthUnitEntity.getPhone())
                 .street(healthUnitEntity.getStreet())
                 .number(healthUnitEntity.getNumber())

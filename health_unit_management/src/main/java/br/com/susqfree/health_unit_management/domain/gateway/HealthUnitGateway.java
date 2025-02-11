@@ -10,6 +10,5 @@ public interface HealthUnitGateway {
     HealthUnit update(Long id, HealthUnit healthUnit);
     HealthUnit findById(Long id);
     List<HealthUnit> findAll();
-    void delete(Long id);
 
 }

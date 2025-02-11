@@ -1,5 +1,6 @@
 package br.com.susqfree.health_unit_management.domain.output;
 
+import br.com.susqfree.health_unit_management.domain.model.HealthUnitType;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -11,8 +12,7 @@ public class HealthUnitOutput {
 
     private Long id;
     private String name;
-    private String type;
-    private Integer capacity;
+    private HealthUnitType type;
     private String phone;
     private String street;
     private String number;

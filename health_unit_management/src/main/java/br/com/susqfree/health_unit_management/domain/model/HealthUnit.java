@@ -9,8 +9,7 @@ public class HealthUnit {
 
     private Long id;
     private String name;
-    private String type;
-    private Integer capacity;
+    private HealthUnitType type;
     private String phone;
     private String street;
     private String number;

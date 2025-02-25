@@ -6,16 +6,16 @@ public enum Pregnancy {
     NAO("Não", 0),
     NAO_SEI("Não sei", 0);
 
-    private final String descricao;
+    private final String description;
     private final int severityLevel;
 
-    Pregnancy(String descricao, int severityLevel) {
-        this.descricao = descricao;
+    Pregnancy(String description, int severityLevel) {
+        this.description = description;
         this.severityLevel = severityLevel;
     }
 
-    public String getDescricao() {
-        return descricao;
+    public String getDescription() {
+        return description;
     }
 
     public int getSeverityLevel() {

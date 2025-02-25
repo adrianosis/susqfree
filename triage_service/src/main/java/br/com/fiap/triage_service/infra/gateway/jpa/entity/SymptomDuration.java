@@ -10,9 +10,9 @@ public enum SymptomDuration {
     MAIS_DE_UMA_SEMANA("Mais de uma semana"),
     CRONICO("Crônico");
 
-    private final String descricao;
+    private final String description;
 
-    SymptomDuration(String descricao) {
-        this.descricao = descricao;
+    SymptomDuration(String description) {
+        this.description = description;
     }
 }

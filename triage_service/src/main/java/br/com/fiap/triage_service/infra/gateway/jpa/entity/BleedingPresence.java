@@ -1,19 +1,19 @@
 package br.com.fiap.triage_service.infra.gateway.jpa.entity;
 
 public enum BleedingPresence {
-    SIM("Sim", 5),
+    SIM("Sim", 4),
     NAO("Não", 0);
 
-    private final String descricao;
+    private final String description;
     private final int severityLevel;
 
-    BleedingPresence(String descricao, int severityLevel) {
-        this.descricao = descricao;
+    BleedingPresence(String description, int severityLevel) {
+        this.description = description;
         this.severityLevel = severityLevel;
     }
 
-    public String getDescricao() {
-        return descricao;
+    public String getDescription() {
+        return description;
     }
 
     public int getSeverityLevel() {

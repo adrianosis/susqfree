@@ -5,16 +5,16 @@ public enum HeartRate {
     TAQUICARDIA("Taquicardia", 3),
     BRADICARDIA("Bradicardia", 3);
 
-    private final String descricao;
+    private final String description;
     private final int severityLevel;
 
-    HeartRate(String descricao, int severityLevel) {
-        this.descricao = descricao;
+    HeartRate(String description, int severityLevel) {
+        this.description = description;
         this.severityLevel = severityLevel;
     }
 
-    public String getDescricao() {
-        return descricao;
+    public String getDescription() {
+        return description;
     }
 
     public int getSeverityLevel() {

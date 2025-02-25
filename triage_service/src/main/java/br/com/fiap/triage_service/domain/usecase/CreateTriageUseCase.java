@@ -64,7 +64,6 @@ public class CreateTriageUseCase {
             totalSeverity += 2; // Chronic conditions
         }
 
-        // Determine priority code
         PriorityCode priorityCode;
         if (totalSeverity >= 15) {
             priorityCode = PriorityCode.R;

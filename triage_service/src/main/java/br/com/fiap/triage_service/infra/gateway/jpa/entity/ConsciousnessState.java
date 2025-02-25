@@ -6,16 +6,16 @@ public enum ConsciousnessState {
     CONFUSAO("Confusão Mental", 4),
     INCONSCIENTE("Inconsciente", 5);
 
-    private final String descricao;
+    private final String description;
     private final int severityLevel;
 
-    ConsciousnessState(String descricao, int severityLevel) {
-        this.descricao = descricao;
+    ConsciousnessState(String description, int severityLevel) {
+        this.description = description;
         this.severityLevel = severityLevel;
     }
 
-    public String getDescricao() {
-        return descricao;
+    public String getDescription() {
+        return description;
     }
 
     public int getSeverityLevel() {

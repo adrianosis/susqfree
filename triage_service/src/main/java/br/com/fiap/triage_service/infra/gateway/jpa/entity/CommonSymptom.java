@@ -8,13 +8,12 @@ public enum CommonSymptom {
     OLHOS_VERMELHOS("Olhos vermelhos", 2),
     PERDA_OLFATO("Perda de olfato", 3),
     PERDA_PALADAR("Perda de paladar", 3),
-    COCEIRA("Coceira (prurido)", 1),
+    COCEIRA("Coceira", 1),
 
     // Sistema Respiratório
     TOSSE("Tosse", 2),
     FALTA_AR("Falta de ar", 5),
     SECRECAO_NASAL("Secreção nasal", 1),
-    DISPNEIA("Dispneia", 4),
 
     // Sistema Cardiovascular
     DOR_PEITO("Dor no peito", 5),
@@ -33,22 +32,22 @@ public enum CommonSymptom {
     RIGIDEZ_ARTICULACOES("Rigidez nas articulações", 3),
 
     // Sintomas Gerais
-    FEBRE("Febre", 3),
+    FEBRE("Febre", 2),
     SUOR_NOTURNO("Suor noturno", 2),
     PERDA_PESO("Perda de peso", 3),
     SANGRAMENTO("Sangramento", 5),
     ERUPCAO_CUTANEA("Erupção cutânea", 2);
 
-    private final String descricao;
+    private final String description;
     private final int severityLevel;
 
-    CommonSymptom(String descricao, int severityLevel) {
-        this.descricao = descricao;
+    CommonSymptom(String description, int severityLevel) {
+        this.description = description;
         this.severityLevel = severityLevel;
     }
 
-    public String getDescricao() {
-        return descricao;
+    public String getDescription() {
+        return description;
     }
 
     public int getSeverityLevel() {

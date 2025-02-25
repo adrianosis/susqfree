@@ -7,16 +7,16 @@ public enum PainIntensity {
     INTENSA("Intensa", 4),
     INSUPORTAVEL("Insuportável", 5);
 
-    private final String descricao;
+    private final String description;
     private final int severityLevel;
 
-    PainIntensity(String descricao, int severityLevel) {
-        this.descricao = descricao;
+    PainIntensity(String description, int severityLevel) {
+        this.description = description;
         this.severityLevel = severityLevel;
     }
 
-    public String getDescricao() {
-        return descricao;
+    public String getDescription() {
+        return description;
     }
 
     public int getSeverityLevel() {

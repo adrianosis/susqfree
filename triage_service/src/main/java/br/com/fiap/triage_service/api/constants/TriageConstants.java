@@ -29,7 +29,6 @@ public class TriageConstants {
         put("5. Dor e Sangramento", new LinkedHashMap<String, Object>() {{
             put("Intensidade da Dor", List.of("Sem dor", "Leve", "Moderada", "Intensa", "Insuportável"));
             put("Sangramento presente?", List.of("Sim", "Não"));
-            put("Local do Sangramento", List.of("Não aplicável", "Boca", "Nariz", "Ouvido", "Retal", "Urinário", "Outro (Especificar)"));
         }});
         put("6. Histórico Clínico", new LinkedHashMap<String, Object>() {{
             put("Doenças Crônicas", List.of("Diabetes", "Hipertensão", "Doenças cardiovasculares", "Doenças respiratórias crônicas", "Insuficiência renal", "Outras (Especificar)"));

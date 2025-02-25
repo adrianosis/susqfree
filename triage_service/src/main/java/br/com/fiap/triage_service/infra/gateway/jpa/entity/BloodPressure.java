@@ -5,16 +5,16 @@ public enum BloodPressure {
     HIPOTENSAO("Hipotensão", 3),
     HIPERTENSAO("Hipertensão", 3);
 
-    private final String descricao;
+    private final String description;
     private final int severityLevel;
 
-    BloodPressure(String descricao, int severityLevel) {
-        this.descricao = descricao;
+    BloodPressure(String description, int severityLevel) {
+        this.description = description;
         this.severityLevel = severityLevel;
     }
 
-    public String getDescricao() {
-        return descricao;
+    public String getDescription() {
+        return description;
     }
 
     public int getSeverityLevel() {

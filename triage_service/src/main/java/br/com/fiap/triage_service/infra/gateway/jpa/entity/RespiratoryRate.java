@@ -6,16 +6,16 @@ public enum RespiratoryRate {
     DISPNEIA_MODERADA("Dispneia Moderada", 4),
     DISPNEIA_SEVERA("Dispneia Severa", 5);
 
-    private final String descricao;
+    private final String description;
     private final int severityLevel;
 
-    RespiratoryRate(String descricao, int severityLevel) {
-        this.descricao = descricao;
+    RespiratoryRate(String description, int severityLevel) {
+        this.description = description;
         this.severityLevel = severityLevel;
     }
 
-    public String getDescricao() {
-        return descricao;
+    public String getDescription() {
+        return description;
     }
 
     public int getSeverityLevel() {

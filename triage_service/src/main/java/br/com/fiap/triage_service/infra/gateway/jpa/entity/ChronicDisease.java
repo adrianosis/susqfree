@@ -9,16 +9,16 @@ public enum ChronicDisease {
     DOENCA_RENAL("Doença renal", 4),
     IMUNOSSUPRESSAO("Imunossupressão", 5);
 
-    private final String descricao;
+    private final String description;
     private final int severityLevel;
 
-    ChronicDisease(String descricao, int severityLevel) {
-        this.descricao = descricao;
+    ChronicDisease(String description, int severityLevel) {
+        this.description = description;
         this.severityLevel = severityLevel;
     }
 
-    public String getDescricao() {
-        return descricao;
+    public String getDescription() {
+        return description;
     }
 
     public int getSeverityLevel() {

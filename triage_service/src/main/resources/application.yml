@@ -6,6 +6,17 @@ spring:
     url: jdbc:postgresql://localhost:5432/health_triage
     username: postgres
     password: admin
+  security:
+    oauth2:
+      client:
+        provider:
+          cognito:
+            issuerUri: https://cognito-idp.us-east-2.amazonaws.com/us-east-2_qVPmO78l7
+            user-name-attribute: username
+        registration:
+          cognito:
+            client-id: 6qhvjt55l0k92ig4irn7ugn7r7
+            client-secret: 1qfqjleojvo80ga1jv0o9c48kjk305gg5raa0sed2d18dsock4hk
 
 springdoc:
   swagger-ui:

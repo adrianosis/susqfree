@@ -1,6 +1,6 @@
 spring:
   application:
-    name: health_unit_management
+    name: health-unit-management
   datasource:
     driver-class-name: org.postgresql.Driver
     url: jdbc:postgresql://localhost:5432/health_unit_management
@@ -12,10 +12,14 @@ springdoc:
     operationsSorter: method
 
 server:
-  port: 8080
-  # Uncomment to control stack trace inclusion on errors
-  # error:
-  #   include-stacktrace: never
+  port: 0
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+  instance:
+    instance-id: "${spring.application.name}:${spring.application.instance_id:${random.value}}"
 
 # Actuator
 management:

@@ -4,7 +4,6 @@ import br.com.susqfree.schedule_management.domain.model.Appointment;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -18,15 +17,15 @@ public interface AppointmentGateway {
 
     Optional<Appointment> findById(UUID appointmentId);
 
-    List<Appointment> findByPatientIdAndDateTimeBetween(UUID patientId, LocalDateTime startDate, LocalDateTime endDate);
+    List<Appointment> findAllByPatientIdAndDateTimeBetween(UUID patientId, LocalDateTime startDate, LocalDateTime endDate);
 
-    List<Appointment> findByDoctorIdAndDateTimeBetween(long doctorId, LocalDateTime startDateTime, LocalDateTime endDateTime);
+    List<Appointment> findAllByDoctorIdAndDateTimeBetween(long doctorId, LocalDateTime startDateTime, LocalDateTime endDateTime);
 
-    Page<Appointment> findByHealthUnitIdAndDateTimeBetween(long healthUnitId,
+    Page<Appointment> findAllByHealthUnitIdAndDateTimeBetween(long healthUnitId,
                                                            LocalDateTime startDateTime,
                                                            LocalDateTime endDateTime,
                                                            Pageable pageable);
 
-    Page<Appointment> findAvailableByHealthUnitAndSpecialty(long healthUnitId, long specialtyId, Pageable pageable);
+    Page<Appointment> findAllAvailableByHealthUnitAndSpecialty(long healthUnitId, long specialtyId, Pageable pageable);
 
 }

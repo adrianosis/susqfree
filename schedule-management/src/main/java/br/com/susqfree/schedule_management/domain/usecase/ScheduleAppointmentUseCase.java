@@ -26,6 +26,7 @@ public class ScheduleAppointmentUseCase {
                 .orElseThrow(() -> new AppointmentException("Patient not found"));
 
         appointment.schedule(patient);
+        appointment = appointmentGateway.save(appointment);
 
         return mapper.toOutput(appointment);
     }

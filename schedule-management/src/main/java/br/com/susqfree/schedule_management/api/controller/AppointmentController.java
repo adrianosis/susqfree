@@ -50,7 +50,7 @@ public class AppointmentController {
     }
 
     @PutMapping("/{appointmentId}/complete")
-    public ResponseEntity<AppointmentOutput> confirm(@PathVariable UUID appointmentId) {
+    public ResponseEntity<AppointmentOutput> complete(@PathVariable UUID appointmentId) {
         var output = completeAppointmentUsecase.execute(appointmentId);
 
         return ResponseEntity.ok(output);

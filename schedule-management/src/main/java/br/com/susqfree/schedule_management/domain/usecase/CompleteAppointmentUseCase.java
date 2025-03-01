@@ -22,6 +22,7 @@ public class CompleteAppointmentUseCase {
                 .orElseThrow(() -> new AppointmentException("Appointment not found"));
 
         appointment.complete();
+        appointment = appointmentGateway.save(appointment);
 
         return mapper.toOutput(appointment);
     }

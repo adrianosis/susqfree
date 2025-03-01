@@ -16,7 +16,7 @@ public class FindAppointmentsAvailableByHealthUnitAndSpecialtyUseCase {
     private final AppointmentOutputMapper mapper;
 
     public Page<AppointmentOutput> execute(long healthUnitId, long specialtyId, Pageable pageable) {
-        var appointmentsPage = appointmentGateway.findAvailableByHealthUnitAndSpecialty(healthUnitId, specialtyId, pageable);
+        var appointmentsPage = appointmentGateway.findAllAvailableByHealthUnitAndSpecialty(healthUnitId, specialtyId, pageable);
 
         return appointmentsPage.map(mapper::toOutput);
     }

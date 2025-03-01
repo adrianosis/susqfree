@@ -22,6 +22,7 @@ public class CancelAppointmentUseCase {
                 .orElseThrow(() -> new AppointmentException("Appointment not found"));
 
         appointment.cancel();
+        appointment = appointmentGateway.save(appointment);
 
         return mapper.toOutput(appointment);
     }

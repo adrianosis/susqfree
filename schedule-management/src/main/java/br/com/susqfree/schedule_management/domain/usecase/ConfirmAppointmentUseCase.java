@@ -20,7 +20,8 @@ public class ConfirmAppointmentUseCase {
         Appointment appointment = appointmentGateway.findById(input.getAppointmentId())
                 .orElseThrow(() -> new AppointmentException("Appointment not found"));
 
-        appointment.confirm();
+        appointment.confirm(input.isConfirmed());
+        appointment = appointmentGateway.save(appointment);
 
         return mapper.toOutput(appointment);
     }

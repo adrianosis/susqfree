@@ -24,7 +24,7 @@ public interface AppointmentRepository extends MongoRepository<AppointmentDocume
                                                                       LocalDateTime endDateTime,
                                                                       Pageable pageable);
 
-    Page<AppointmentDocument> findByHealthUnitIdAndSpecialtyIdOrderByDateTime(long healthUnitId,
-                                                                              long specialtyId,
-                                                                              Pageable pageable);
+    Page<AppointmentDocument> findAllByHealthUnitIdAndSpecialtyIdOrderByDateTime(long healthUnitId,
+                                                                                 long specialtyId,
+                                                                                 Pageable pageable);
 }

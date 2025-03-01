@@ -47,21 +47,21 @@ public class AppointmentMongoGateway implements AppointmentGateway {
     }
 
     @Override
-    public List<Appointment> findByPatientIdAndDateTimeBetween(UUID patientId, LocalDateTime startDate, LocalDateTime endDate) {
+    public List<Appointment> findAllByPatientIdAndDateTimeBetween(UUID patientId, LocalDateTime startDate, LocalDateTime endDate) {
         var documents = appointmentRepository.findAllByPatientIdAndDateTimeBetween(patientId, startDate, endDate);
 
         return documents.stream().map(mapper::toDomain).toList();
     }
 
     @Override
-    public List<Appointment> findByDoctorIdAndDateTimeBetween(long doctorId, LocalDateTime startDateTime, LocalDateTime endDateTime) {
+    public List<Appointment> findAllByDoctorIdAndDateTimeBetween(long doctorId, LocalDateTime startDateTime, LocalDateTime endDateTime) {
         var documents = appointmentRepository.findAllByDoctorIdAndDateTimeBetween(doctorId, startDateTime, endDateTime);
 
         return documents.stream().map(mapper::toDomain).toList();
     }
 
     @Override
-    public Page<Appointment> findByHealthUnitIdAndDateTimeBetween(long healthUnitId,
+    public Page<Appointment> findAllByHealthUnitIdAndDateTimeBetween(long healthUnitId,
                                                                   LocalDateTime startDateTime,
                                                                   LocalDateTime endDateTime,
                                                                   Pageable pageable) {
@@ -71,8 +71,8 @@ public class AppointmentMongoGateway implements AppointmentGateway {
     }
 
     @Override
-    public Page<Appointment> findAvailableByHealthUnitAndSpecialty(long healthUnitId, long specialtyId, Pageable pageable) {
-        var documentsPage = appointmentRepository.findByHealthUnitIdAndSpecialtyIdOrderByDateTime(healthUnitId, specialtyId, pageable);
+    public Page<Appointment> findAllAvailableByHealthUnitAndSpecialty(long healthUnitId, long specialtyId, Pageable pageable) {
+        var documentsPage = appointmentRepository.findAllByHealthUnitIdAndSpecialtyIdOrderByDateTime(healthUnitId, specialtyId, pageable);
 
         return documentsPage.map(mapper::toDomain);
     }

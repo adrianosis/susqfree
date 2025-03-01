@@ -29,7 +29,7 @@ public class CreateDoctorAppointmentsUseCase {
     private final SpecialtyGateway specialtyGateway;
     private final AppointmentOutputMapper mapper;
 
-    public List<AppointmentOutput> execute(List<CreateAppointmentInput> inputs){
+    public List<AppointmentOutput> execute(List<CreateAppointmentInput> inputs) {
         List<Appointment> appointments = new ArrayList<>();
         Doctor doctor = doctorGateway.findById(inputs.get(0).getDoctorId())
                 .orElseThrow(() -> new AppointmentException("Doctor not found"));
@@ -38,7 +38,14 @@ public class CreateDoctorAppointmentsUseCase {
         Specialty specialty = specialtyGateway.findById(inputs.get(0).getSpecialtyId())
                 .orElseThrow(() -> new AppointmentException("Specialty not found"));
 
+
         for (CreateAppointmentInput input : inputs) {
+            var existingAppointments = appointmentGateway.findAllByDoctorIdAndDateTimeBetween(doctor.getId(), input.getStartDateTime(), input.getEndDateTime());
+
+            if (!existingAppointments.isEmpty()) {
+                throw new AppointmentException("Already existing appointment");
+            }
+
             LocalDateTime dateTime = input.getStartDateTime();
             while (dateTime.isBefore(input.getEndDateTime())) {
                 Appointment appointment = Appointment.builder()
@@ -53,7 +60,7 @@ public class CreateDoctorAppointmentsUseCase {
                 dateTime = dateTime.plusMinutes(30);
             }
         }
-        
+
         appointments = appointmentGateway.saveAll(appointments);
 
         return appointments.stream().map(mapper::toOutput).toList();

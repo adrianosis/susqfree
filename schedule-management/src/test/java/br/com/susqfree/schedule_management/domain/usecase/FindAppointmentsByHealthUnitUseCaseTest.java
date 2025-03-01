@@ -2,15 +2,28 @@ package br.com.susqfree.schedule_management.domain.usecase;
 
 import br.com.susqfree.schedule_management.domain.gateway.AppointmentGateway;
 import br.com.susqfree.schedule_management.domain.mapper.AppointmentOutputMapper;
+import br.com.susqfree.schedule_management.domain.model.Appointment;
+import br.com.susqfree.schedule_management.utils.AppointmentHelper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.UUID;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.*;
 
 public class FindAppointmentsByHealthUnitUseCaseTest {
 
-
-    private FindAppointmentsByDoctorUseCase findAppointmentsByDoctorUseCase;
+    private FindAppointmentsByHealthUnitUseCase findAppointmentsByHealthUnitUseCase;
 
     @Mock
     private AppointmentGateway appointmentGateway;
@@ -19,14 +32,31 @@ public class FindAppointmentsByHealthUnitUseCaseTest {
     @BeforeEach
     public void setup() {
         openMocks = MockitoAnnotations.openMocks(this);
-        findAppointmentsByDoctorUseCase = new FindAppointmentsByDoctorUseCase(appointmentGateway, new AppointmentOutputMapper());
+        findAppointmentsByHealthUnitUseCase = new FindAppointmentsByHealthUnitUseCase(appointmentGateway, new AppointmentOutputMapper());
     }
 
     @Test
-    public void shouldFindAppointmentsByDoctor() {
+    public void shouldFindAppointmentsByHealthUnit() {
         // Arrange
+        Appointment appointment1 = AppointmentHelper.createAppointment(UUID.randomUUID());
+        Appointment appointment2 = AppointmentHelper.createAppointment(UUID.randomUUID());
+
+        when(appointmentGateway.findAllByHealthUnitIdAndDateTimeBetween(
+                anyLong(), any(LocalDateTime.class), any(LocalDateTime.class), any(Pageable.class)))
+                .thenReturn(new PageImpl<>(List.of(appointment1, appointment2)));
+
+        long healthUnitId = 1L;
+        LocalDateTime startDateTine = LocalDateTime.of(2025, 3, 1, 8, 0);
+        LocalDateTime endDateTine = LocalDateTime.of(2025, 3, 10, 22, 0);
+
         // Act
+        var foundAppointments = findAppointmentsByHealthUnitUseCase.execute(healthUnitId, startDateTine, endDateTine, PageRequest.of(0, 10));
+
         // Assert
+        verify(appointmentGateway, times(1))
+                .findAllByHealthUnitIdAndDateTimeBetween(anyLong(), any(LocalDateTime.class), any(LocalDateTime.class), any(Pageable.class));
+
+        assertThat(foundAppointments).hasSize(2);
     }
 
 }

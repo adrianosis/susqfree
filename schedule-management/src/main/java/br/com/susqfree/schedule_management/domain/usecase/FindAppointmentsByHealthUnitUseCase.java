@@ -18,7 +18,7 @@ public class FindAppointmentsByHealthUnitUseCase {
     private final AppointmentOutputMapper mapper;
 
     public List<AppointmentOutput> execute(long healthUnitId, LocalDateTime startDateTime, LocalDateTime endDateTime, Pageable pageable) {
-        var appointments = appointmentGateway.findByHealthUnitIdAndDateTimeBetween(healthUnitId, startDateTime, endDateTime, pageable);
+        var appointments = appointmentGateway.findAllByHealthUnitIdAndDateTimeBetween(healthUnitId, startDateTime, endDateTime, pageable);
 
         return appointments.stream().map(mapper::toOutput).toList();
     }

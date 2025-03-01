@@ -1,5 +1,6 @@
 package br.com.susqfree.schedule_management.domain.model;
 
+import br.com.susqfree.schedule_management.infra.exception.AppointmentException;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -34,6 +35,7 @@ public class Appointment {
     }
 
     public void schedule(Patient patient) {
+        this.validateAvaliable();
         this.status = Status.SCHEDULED;
         this.patient = patient;
     }
@@ -43,13 +45,22 @@ public class Appointment {
         this.patient = null;
     }
 
-    public void confirm() {
-        this.status = Status.CONFIRMED;
+    public void confirm(boolean confirmed) {
+        if (confirmed) {
+            this.status = Status.CONFIRMED;
+        } else {
+            cancel();
+        }
     }
 
     public void complete() {
         this.status = Status.COMPLETED;
+    }
 
+    private void validateAvaliable() throws AppointmentException {
+        if (this.status != Status.AVAILABLE) {
+            throw new AppointmentException("Schedule not available");
+        }
     }
 
 }

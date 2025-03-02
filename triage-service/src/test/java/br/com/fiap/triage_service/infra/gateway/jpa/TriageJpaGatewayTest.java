@@ -85,7 +85,6 @@ class TriageJpaGatewayTest {
 
         List<Triage> result = triageJpaGateway.findByPatientId(patientId);
 
-        // Assert
         verify(repository, times(1)).findByPatientId(patientId);
         assertThat(result).isNotEmpty();
     }

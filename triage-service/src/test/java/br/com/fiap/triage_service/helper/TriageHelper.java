@@ -5,6 +5,7 @@ import br.com.fiap.triage_service.domain.model.Triage;
 import br.com.fiap.triage_service.domain.output.TriageOutput;
 import br.com.fiap.triage_service.domain.output.TriagePriorityOutput;
 import br.com.fiap.triage_service.infra.gateway.jpa.entity.*;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.util.Arrays;
 import java.util.UUID;
@@ -228,5 +229,13 @@ public class TriageHelper {
                 .allergies(Arrays.asList())
                 .priority(priority)
                 .build();
+    }
+
+    public static String asJsonString(final Object obj) {
+        try {
+            return new ObjectMapper().writeValueAsString(obj);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 }

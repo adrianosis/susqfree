@@ -31,7 +31,7 @@ public class PatientIntegrationGatewayIT {
         var patient = PatientHelper.createPatientDto();
         UUID patientId = patient.getId();
 
-        stubFor(get("/patient/" + patientId)
+        stubFor(get("/api/patient/" + patientId)
                 .willReturn(okJson(asJsonString(patient))));
 
         // Act

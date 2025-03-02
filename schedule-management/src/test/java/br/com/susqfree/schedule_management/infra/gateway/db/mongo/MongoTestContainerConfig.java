@@ -1,4 +1,4 @@
-package br.com.susqfree.schedule_management;
+package br.com.susqfree.schedule_management.infra.gateway.db.mongo;
 
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.DynamicPropertyRegistry;

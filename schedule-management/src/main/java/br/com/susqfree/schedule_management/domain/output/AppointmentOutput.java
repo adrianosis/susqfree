@@ -1,15 +1,12 @@
 package br.com.susqfree.schedule_management.domain.output;
 
 import br.com.susqfree.schedule_management.domain.model.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-@Getter
+@Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor

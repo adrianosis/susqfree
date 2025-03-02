@@ -30,22 +30,25 @@ public class Appointment {
     }
 
     public void cancel(String justification) {
+        this.validateNotCompleted();
         this.justification = justification;
         this.status = Status.CANCELLED;
     }
 
     public void schedule(Patient patient) {
-        this.validateAvaliable();
+        this.validateAvailable();
         this.status = Status.SCHEDULED;
         this.patient = patient;
     }
 
     public void cancel() {
+        this.validateScheduledOrConfirmed();
         this.status = Status.AVAILABLE;
         this.patient = null;
     }
 
     public void confirm(boolean confirmed) {
+        this.validateScheduled();
         if (confirmed) {
             this.status = Status.CONFIRMED;
         } else {
@@ -54,12 +57,31 @@ public class Appointment {
     }
 
     public void complete() {
+        this.validateScheduledOrConfirmed();
         this.status = Status.COMPLETED;
     }
 
-    private void validateAvaliable() throws AppointmentException {
+    private void validateAvailable() throws AppointmentException {
         if (this.status != Status.AVAILABLE) {
-            throw new AppointmentException("Schedule not available");
+            throw new AppointmentException("Appointment not available");
+        }
+    }
+
+    private void validateScheduled() throws AppointmentException {
+        if (this.status != Status.SCHEDULED) {
+            throw new AppointmentException("Appointment not scheduled");
+        }
+    }
+
+    private void validateScheduledOrConfirmed() throws AppointmentException {
+        if (this.status != Status.SCHEDULED && this.status != Status.CONFIRMED) {
+            throw new AppointmentException("Appointment not scheduled or Confirmed");
+        }
+    }
+
+    private void validateNotCompleted() {
+        if (this.status == Status.COMPLETED) {
+            throw new AppointmentException("Appointment is Completed");
         }
     }
 

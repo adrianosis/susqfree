@@ -47,8 +47,8 @@ public class AppointmentMongoGateway implements AppointmentGateway {
     }
 
     @Override
-    public List<Appointment> findAllByPatientIdAndDateTimeBetween(UUID patientId, LocalDateTime startDate, LocalDateTime endDate) {
-        var documents = appointmentRepository.findAllByPatientIdAndDateTimeBetween(patientId, startDate, endDate);
+    public List<Appointment> findAllByPatientIdAndDateTimeBetween(UUID patientId, LocalDateTime startDateTime, LocalDateTime endDateTime) {
+        var documents = appointmentRepository.findAllByPatientIdAndDateTimeBetween(patientId, startDateTime, endDateTime);
 
         return documents.stream().map(mapper::toDomain).toList();
     }
@@ -62,9 +62,9 @@ public class AppointmentMongoGateway implements AppointmentGateway {
 
     @Override
     public Page<Appointment> findAllByHealthUnitIdAndDateTimeBetween(long healthUnitId,
-                                                                  LocalDateTime startDateTime,
-                                                                  LocalDateTime endDateTime,
-                                                                  Pageable pageable) {
+                                                                     LocalDateTime startDateTime,
+                                                                     LocalDateTime endDateTime,
+                                                                     Pageable pageable) {
         var documentsPage = appointmentRepository.findAllByHealthUnitIdAndDateTimeBetween(healthUnitId, startDateTime, endDateTime, pageable);
 
         return documentsPage.map(mapper::toDomain);

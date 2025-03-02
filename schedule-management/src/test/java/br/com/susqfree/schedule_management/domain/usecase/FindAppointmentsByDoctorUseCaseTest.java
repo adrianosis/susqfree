@@ -3,6 +3,7 @@ package br.com.susqfree.schedule_management.domain.usecase;
 import br.com.susqfree.schedule_management.domain.gateway.AppointmentGateway;
 import br.com.susqfree.schedule_management.domain.mapper.AppointmentOutputMapper;
 import br.com.susqfree.schedule_management.domain.model.Appointment;
+import br.com.susqfree.schedule_management.domain.model.Status;
 import br.com.susqfree.schedule_management.utils.AppointmentHelper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -34,19 +35,19 @@ public class FindAppointmentsByDoctorUseCaseTest {
     @Test
     public void shouldFindAppointmentsByDoctor() {
         // Arrange
-        Appointment appointment1 = AppointmentHelper.createAppointment(UUID.randomUUID());
-        Appointment appointment2 = AppointmentHelper.createAppointment(UUID.randomUUID());
+        Appointment appointment1 = AppointmentHelper.createAppointment(UUID.randomUUID(), Status.AVAILABLE);
+        Appointment appointment2 = AppointmentHelper.createAppointment(UUID.randomUUID(), Status.AVAILABLE);
 
         when(appointmentGateway.findAllByDoctorIdAndDateTimeBetween(anyLong(), any(LocalDateTime.class), any(LocalDateTime.class)))
                 .thenReturn(List.of(appointment1, appointment2));
 
         long doctorId = 1L;
-        LocalDateTime startDateTine = LocalDateTime.of(2025, 3, 1, 8, 0);
-        LocalDateTime endDateTine = LocalDateTime.of(2025, 3, 10, 22, 0);
+        LocalDateTime startDateTime = LocalDateTime.of(2025, 3, 1, 8, 0);
+        LocalDateTime endDateTime = LocalDateTime.of(2025, 3, 10, 22, 0);
 
 
         // Act
-        var foundAppointments = findAppointmentsByDoctorUseCase.execute(doctorId, startDateTine, endDateTine);
+        var foundAppointments = findAppointmentsByDoctorUseCase.execute(doctorId, startDateTime, endDateTime);
 
         // Assert
         verify(appointmentGateway, times(1))

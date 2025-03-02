@@ -4,6 +4,7 @@ import br.com.susqfree.schedule_management.domain.gateway.AppointmentGateway;
 import br.com.susqfree.schedule_management.domain.mapper.AppointmentOutputMapper;
 import br.com.susqfree.schedule_management.domain.model.Appointment;
 import br.com.susqfree.schedule_management.domain.model.Status;
+import br.com.susqfree.schedule_management.infra.exception.AppointmentException;
 import br.com.susqfree.schedule_management.utils.AppointmentHelper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -14,6 +15,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.AdditionalAnswers.returnsFirstArg;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
@@ -36,7 +38,7 @@ public class CompleteAppointmentUseCaseTest {
     public void shouldCompleteAppointment() {
         // Arrange
         UUID appointmentId = UUID.randomUUID();
-        Appointment appointment = AppointmentHelper.createAppointment(appointmentId);
+        Appointment appointment = AppointmentHelper.createAppointment(appointmentId, Status.CONFIRMED);
 
         when(appointmentGateway.findById(any(UUID.class))).thenReturn(Optional.ofNullable(appointment));
         when(appointmentGateway.save(any(Appointment.class))).thenAnswer(returnsFirstArg());
@@ -49,6 +51,23 @@ public class CompleteAppointmentUseCaseTest {
         verify(appointmentGateway, times(1)).save(any(Appointment.class));
 
         assertThat(updatedAppointment.getStatus()).isEqualTo(Status.COMPLETED);
+    }
+
+    @Test
+    public void shouldThrowException_WhenCompleteAppointment_WithStatusCompleted() {
+        UUID appointmentId = UUID.randomUUID();
+        Appointment appointment = AppointmentHelper.createAppointment(appointmentId, Status.AVAILABLE);
+
+        when(appointmentGateway.findById(any(UUID.class))).thenReturn(Optional.ofNullable(appointment));
+
+        // Act
+        // Assert
+        assertThatThrownBy(
+                () -> completeAppointmentUseCase.execute(appointmentId))
+                .isInstanceOf(AppointmentException.class)
+                .hasMessage("Appointment not scheduled or Confirmed");
+
+        verify(appointmentGateway, times(1)).findById(any(UUID.class));
     }
 
 }

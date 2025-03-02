@@ -5,6 +5,7 @@ import br.com.susqfree.schedule_management.domain.input.CancelDoctorAppointments
 import br.com.susqfree.schedule_management.domain.mapper.AppointmentOutputMapper;
 import br.com.susqfree.schedule_management.domain.model.Appointment;
 import br.com.susqfree.schedule_management.domain.model.Status;
+import br.com.susqfree.schedule_management.infra.exception.AppointmentException;
 import br.com.susqfree.schedule_management.utils.AppointmentHelper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -16,6 +17,7 @@ import java.util.List;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.AdditionalAnswers.returnsFirstArg;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
@@ -39,7 +41,7 @@ public class CancelDoctorAppointmentsUseCaseTest {
     public void shouldCancelDoctorAppointments() {
         // Arrange
         long doctorId = 1L;
-        Appointment appointment = AppointmentHelper.createAppointment(UUID.randomUUID());
+        Appointment appointment = AppointmentHelper.createAppointment(UUID.randomUUID(), Status.AVAILABLE);
 
         when(appointmentGateway.findAllByDoctorIdAndDateTimeBetween(anyLong(), any(LocalDateTime.class), any(LocalDateTime.class)))
                 .thenReturn(List.of(appointment));
@@ -63,7 +65,34 @@ public class CancelDoctorAppointmentsUseCaseTest {
         assertThat(canceledAppointments).hasSize(1);
         assertThat(canceledAppointments.get(0).getStatus()).isEqualTo(Status.CANCELLED);
         assertThat(canceledAppointments.get(0).getJustification()).isEqualTo("Personal commitment");
+    }
 
+
+    @Test
+    public void shouldThrowException_WhenCancelDoctorAppointment_WithStatusCompleted() {
+        // Arrange
+        long doctorId = 1L;
+        Appointment appointment = AppointmentHelper.createAppointment(UUID.randomUUID(), Status.COMPLETED);
+
+        when(appointmentGateway.findAllByDoctorIdAndDateTimeBetween(anyLong(), any(LocalDateTime.class), any(LocalDateTime.class)))
+                .thenReturn(List.of(appointment));
+
+        var input = CancelDoctorAppointmentsInput.builder()
+                .doctorId(doctorId)
+                .startDateTime(LocalDateTime.of(2025,3,1,8,0))
+                .endDateTime(LocalDateTime.of(2025,3,1,18,0))
+                .justification("Personal commitment")
+                .build();
+
+        // Act
+        // Assert
+        assertThatThrownBy(
+                () -> cancelDoctorAppointmentsUseCase.execute(input))
+                .isInstanceOf(AppointmentException.class)
+                .hasMessage("Appointment is Completed");
+
+        verify(appointmentGateway, times(1)).findAllByDoctorIdAndDateTimeBetween(
+                anyLong(), any(LocalDateTime.class), any(LocalDateTime.class));
     }
 
 }

@@ -1,4 +1,4 @@
-package br.com.susqfree.patient_management.infra.exceptions;
+package br.com.susqfree.schedule_management.infra.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

@@ -1,6 +1,7 @@
 package br.com.susqfree.schedule_management.infra.gateway.db.mongo;
 
 import br.com.susqfree.schedule_management.domain.model.Appointment;
+import br.com.susqfree.schedule_management.domain.model.Status;
 import br.com.susqfree.schedule_management.infra.gateway.db.mongo.document.AppointmentDocument;
 import br.com.susqfree.schedule_management.infra.gateway.db.mongo.mapper.AppointmentDocumentMapper;
 import br.com.susqfree.schedule_management.infra.gateway.db.mongo.repository.AppointmentRepository;
@@ -40,7 +41,7 @@ public class AppointmentMongoGatewayTest {
     @Test
     public void shouldSaveAppointment() {
         // Arrange
-        var appointment = AppointmentHelper.createAppointment(UUID.randomUUID());
+        var appointment = AppointmentHelper.createAppointment(UUID.randomUUID(), Status.AVAILABLE);
 
         when(appointmentRepository.save(any(AppointmentDocument.class))).thenAnswer(returnsFirstArg());
 
@@ -65,8 +66,8 @@ public class AppointmentMongoGatewayTest {
         // Arrange
         when(appointmentRepository.saveAll(anyList())).thenAnswer(returnsFirstArg());
 
-        var appointment1 = AppointmentHelper.createAppointment(UUID.randomUUID());
-        var appointment2 = AppointmentHelper.createAppointment(UUID.randomUUID());
+        var appointment1 = AppointmentHelper.createAppointment(UUID.randomUUID(), Status.AVAILABLE);
+        var appointment2 = AppointmentHelper.createAppointment(UUID.randomUUID(), Status.AVAILABLE);
 
         // Act
         var savedAppointments = appointmentMongoGateway.saveAll(List.of(appointment1, appointment2));

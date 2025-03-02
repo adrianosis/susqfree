@@ -3,6 +3,7 @@ package br.com.susqfree.schedule_management.domain.usecase;
 import br.com.susqfree.schedule_management.domain.gateway.AppointmentGateway;
 import br.com.susqfree.schedule_management.domain.mapper.AppointmentOutputMapper;
 import br.com.susqfree.schedule_management.domain.model.Appointment;
+import br.com.susqfree.schedule_management.domain.model.Status;
 import br.com.susqfree.schedule_management.utils.AppointmentHelper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -37,8 +38,8 @@ public class FindAppointmentsAvailableByHealthUnitAndSpecialtyUseCaseTest {
     @Test
     public void shouldFindAppointmentsAvailableByHealthUnitAndSpecialty() {
         // Arrange
-        Appointment appointment1 = AppointmentHelper.createAppointment(UUID.randomUUID());
-        Appointment appointment2 = AppointmentHelper.createAppointment(UUID.randomUUID());
+        Appointment appointment1 = AppointmentHelper.createAppointment(UUID.randomUUID(), Status.AVAILABLE);
+        Appointment appointment2 = AppointmentHelper.createAppointment(UUID.randomUUID(), Status.AVAILABLE);
 
         when(appointmentGateway.findAllAvailableByHealthUnitAndSpecialty(anyLong(), anyLong(), any(Pageable.class)))
                 .thenReturn(new PageImpl<>(List.of(appointment1, appointment2)));

@@ -1,6 +1,7 @@
 package br.com.susqfree.schedule_management.utils;
 
 import br.com.susqfree.schedule_management.domain.model.Doctor;
+import br.com.susqfree.schedule_management.domain.output.DoctorOutput;
 import br.com.susqfree.schedule_management.infra.gateway.db.mongo.document.DoctorDocument;
 import br.com.susqfree.schedule_management.infra.gateway.integration.dto.DoctorDto;
 
@@ -16,6 +17,15 @@ public class DoctorHelper {
 
     public static DoctorDocument createDoctorDocument() {
         return DoctorDocument.builder()
+                .id(1L)
+                .name("Doctor")
+                .crm("1234")
+                .build();
+    }
+
+
+    public static DoctorOutput createDoctorOutput() {
+        return DoctorOutput.builder()
                 .id(1L)
                 .name("Doctor")
                 .crm("1234")

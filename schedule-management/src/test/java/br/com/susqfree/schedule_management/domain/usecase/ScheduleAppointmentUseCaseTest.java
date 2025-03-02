@@ -8,6 +8,7 @@ import br.com.susqfree.schedule_management.domain.model.Appointment;
 import br.com.susqfree.schedule_management.domain.model.Patient;
 import br.com.susqfree.schedule_management.domain.model.Status;
 import br.com.susqfree.schedule_management.infra.exception.AppointmentException;
+import br.com.susqfree.schedule_management.utils.AppointmentHelper;
 import br.com.susqfree.schedule_management.utils.PatientHelper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -82,14 +83,7 @@ public class ScheduleAppointmentUseCaseTest {
     public void shouldThrowException_WhenScheduleAppointment_WithStatusNotAvailable() {
         // Arrange
         UUID appointmentId = UUID.randomUUID();
-        Appointment appointment = Appointment.builder()
-                .id(appointmentId)
-                .dateTime(LocalDateTime.of(2025, 3, 1, 8, 0))
-                .status(Status.CANCELLED)
-                .doctor(createDoctor())
-                .healthUnit(createHealthUnit())
-                .specialty(createSpecialty())
-                .build();
+        Appointment appointment = AppointmentHelper.createAppointment(appointmentId, Status.SCHEDULED);
         Patient patient = PatientHelper.createPatient();
 
         when(appointmentGateway.findById(any(UUID.class))).thenReturn(Optional.ofNullable(appointment));
@@ -105,7 +99,7 @@ public class ScheduleAppointmentUseCaseTest {
         assertThatThrownBy(
                 () -> scheduleAppointmentUseCase.execute(input))
                 .isInstanceOf(AppointmentException.class)
-                .hasMessage("Schedule not available");
+                .hasMessage("Appointment not available");
 
 
         verify(appointmentGateway, times(1)).findById(any(UUID.class));

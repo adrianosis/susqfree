@@ -1,5 +1,6 @@
 package br.com.susqfree.schedule_management.domain.input;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -13,7 +14,9 @@ import java.util.UUID;
 @AllArgsConstructor
 public class ScheduleAppointmentInput {
 
+    @NotNull
     private UUID appointmentId;
+    @NotNull
     private UUID patientId;
 
 }

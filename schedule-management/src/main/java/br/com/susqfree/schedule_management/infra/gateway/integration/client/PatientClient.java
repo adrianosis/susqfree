@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.UUID;
 
-@FeignClient(value = "patient-management", path = "/patient")
+@FeignClient(value = "patient-management", path = "/api/patient")
 public interface PatientClient {
 
     @GetMapping(value = "/{patientId}")

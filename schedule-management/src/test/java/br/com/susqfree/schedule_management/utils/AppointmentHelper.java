@@ -1,27 +1,24 @@
 package br.com.susqfree.schedule_management.utils;
 
 import br.com.susqfree.schedule_management.domain.model.*;
+import br.com.susqfree.schedule_management.domain.output.AppointmentOutput;
 import br.com.susqfree.schedule_management.infra.gateway.db.mongo.document.*;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-import static br.com.susqfree.schedule_management.utils.DoctorHelper.createDoctor;
-import static br.com.susqfree.schedule_management.utils.DoctorHelper.createDoctorDocument;
-import static br.com.susqfree.schedule_management.utils.HealthUnitHelper.createHealthUnit;
-import static br.com.susqfree.schedule_management.utils.HealthUnitHelper.createHealthUnitDocument;
-import static br.com.susqfree.schedule_management.utils.PatientHelper.createPatient;
-import static br.com.susqfree.schedule_management.utils.PatientHelper.createPatientDocument;
-import static br.com.susqfree.schedule_management.utils.SpecialtyHelper.createSpecialty;
-import static br.com.susqfree.schedule_management.utils.SpecialtyHelper.createSpecialtyDocument;
+import static br.com.susqfree.schedule_management.utils.DoctorHelper.*;
+import static br.com.susqfree.schedule_management.utils.HealthUnitHelper.*;
+import static br.com.susqfree.schedule_management.utils.PatientHelper.*;
+import static br.com.susqfree.schedule_management.utils.SpecialtyHelper.*;
 
 public class AppointmentHelper {
 
-    public static Appointment createAppointment(UUID id) {
+    public static Appointment createAppointment(UUID id, Status status) {
         return Appointment.builder()
                 .id(id)
                 .dateTime(LocalDateTime.of(2025, 3,1, 8,0))
-                .status(Status.AVAILABLE)
+                .status(status)
                 .doctor(createDoctor())
                 .healthUnit(createHealthUnit())
                 .specialty(createSpecialty())
@@ -38,6 +35,18 @@ public class AppointmentHelper {
                 .healthUnit(createHealthUnitDocument())
                 .specialty(createSpecialtyDocument())
                 .patient(createPatientDocument())
+                .build();
+    }
+
+    public static AppointmentOutput createAppointmentOutput(UUID id) {
+        return AppointmentOutput.builder()
+                .id(id)
+                .dateTime(LocalDateTime.of(2025, 3,1, 8,0))
+                .status(Status.AVAILABLE)
+                .doctor(createDoctorOutput())
+                .healthUnit(createHealthUnitOutput())
+                .specialty(createSpecialtyOutput())
+                .patient(createPatientOutput())
                 .build();
     }
 

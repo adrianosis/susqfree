@@ -22,7 +22,7 @@ public class ScheduleAppointmentUseCase {
     public AppointmentOutput execute(ScheduleAppointmentInput input) {
         Appointment appointment = appointmentGateway.findById(input.getAppointmentId())
                 .orElseThrow(() -> new AppointmentException("Appointment not found"));
-        Patient patient = patientGateway.findById(input.getAppointmentId())
+        Patient patient = patientGateway.findById(input.getPatientId())
                 .orElseThrow(() -> new AppointmentException("Patient not found"));
 
         appointment.schedule(patient);

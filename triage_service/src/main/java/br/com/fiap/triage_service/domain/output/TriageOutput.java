@@ -8,13 +8,14 @@ import lombok.Setter;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 
 @Getter
 @Builder
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class TriageOutput {
     private Integer id;
-    private Integer patientId;
+    private UUID patientId;
     private String consultationReason;
     private SymptomDuration symptomDuration;
     private Double bodyTemperature;

@@ -10,4 +10,9 @@ class TriageServiceApplicationTests {
 	void contextLoads() {
 	}
 
+	@Test
+	void main() {
+		TriageServiceApplication.main(new String[]{});
+	}
+
 }

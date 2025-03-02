@@ -12,6 +12,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Component
@@ -37,7 +38,7 @@ public class TriageJpaGateway implements TriageGateway {
     }
 
     @Override
-    public List<Triage> findByPatientId(Integer id) {
+    public List<Triage> findByPatientId(UUID id) {
         List<TriageEntity> triageEntities = repository.findByPatientId(id);
         return triageEntities.stream()
                 .map(TriageEntityMapper::toDomain)

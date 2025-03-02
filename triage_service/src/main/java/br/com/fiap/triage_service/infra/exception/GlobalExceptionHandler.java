@@ -39,7 +39,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(EntityNotFoundException.class)
-    public ResponseEntity handleRestaurantException(EntityNotFoundException ex){
+    public ResponseEntity handleEntityNotFoundException(EntityNotFoundException ex){
 
         MessageError messageError = new MessageError();
         messageError.setTimestamp(LocalDateTime.now());
@@ -50,7 +50,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(Exception.class)
-    public ResponseEntity handleRestaurantException(Exception ex){
+    public ResponseEntity handleException(Exception ex){
 
         MessageError messageError = new MessageError();
         messageError.setTimestamp(LocalDateTime.now());

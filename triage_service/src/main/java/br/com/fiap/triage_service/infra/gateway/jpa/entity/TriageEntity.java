@@ -6,6 +6,7 @@ import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 
 @Entity
 @Table(name = "triage")
@@ -21,7 +22,7 @@ public class TriageEntity {
     private Integer id;
 
     @Column(name = "patient_id", nullable = false)
-    private Integer patientId;
+    private UUID patientId;
 
     @Column(name = "consultation_reason", nullable = false)
     private String consultationReason;

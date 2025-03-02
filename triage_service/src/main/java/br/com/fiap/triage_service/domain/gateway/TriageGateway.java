@@ -6,10 +6,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;
+import java.util.UUID;
 
 public interface TriageGateway {
 
     Triage create(Triage triage);
     Page<Triage> findAll(Pageable pageable);
-    List<Triage> findByPatientId(Integer id);
+    List<Triage> findByPatientId(UUID id);
 }

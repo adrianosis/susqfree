@@ -1,6 +1,6 @@
 CREATE TABLE triage (
     id SERIAL PRIMARY KEY,
-    patient_id INT NOT NULL,
+    patient_id UUID NOT NULL,
     consultation_reason TEXT NOT NULL,
     symptom_duration TEXT,
     body_temperature DOUBLE PRECISION,

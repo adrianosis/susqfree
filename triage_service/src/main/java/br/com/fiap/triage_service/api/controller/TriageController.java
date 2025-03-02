@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
@@ -147,7 +148,7 @@ public class TriageController {
             @ApiResponse(responseCode = "500", description = "Internal server error")
     })
     public ResponseEntity<List<TriageOutput>> findTriagesByPatient(
-            @PathVariable("patientId") Integer patientId) {
+            @PathVariable("patientId") UUID patientId) {
         List<TriageOutput> triages = findTriagesByPatientIdUseCase.execute(patientId);
         if (triages.isEmpty()) {
             return ResponseEntity.notFound().build();

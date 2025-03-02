@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -20,7 +21,7 @@ public class FindTriagesByPatientIdUseCase {
 
     private final TriageGateway triageGateway;
 
-    public List<TriageOutput> execute(Integer patientId) {
+    public List<TriageOutput> execute(UUID patientId) {
         List<Triage> triages = triageGateway.findByPatientId(patientId);
         return triages.stream()
                 .map(TriageMapper::toOutput)

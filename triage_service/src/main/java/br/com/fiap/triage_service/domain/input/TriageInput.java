@@ -8,6 +8,7 @@ import lombok.Builder;
 import lombok.Getter;
 
 import java.util.List;
+import java.util.UUID;
 
 @Getter
 @Builder
@@ -15,7 +16,7 @@ import java.util.List;
         description = "Entrada de dados para triagem",
         example = """
     {
-        "patientId": 12345,
+        "patientId": "328bcfaa-83af-47cc-a732-f9e44e0d7600",
         "consultationReason": "Dor intensa no peito",
         "symptomDuration": "MENOS_DE_UM_DIA",
         "bodyTemperature": 39.5,
@@ -36,7 +37,7 @@ import java.util.List;
 public class TriageInput {
 
     @NotNull
-    private Integer patientId;
+    private UUID patientId;
     @NotBlank
     private String consultationReason;
     private SymptomDuration symptomDuration;

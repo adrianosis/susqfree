@@ -5,13 +5,14 @@ import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 
 @Getter
 @Setter
 @Builder
 public class Triage {
     private Integer id;
-    private Integer patientId;
+    private UUID patientId;
     private String consultationReason;
     private SymptomDuration symptomDuration;
     private Double bodyTemperature;

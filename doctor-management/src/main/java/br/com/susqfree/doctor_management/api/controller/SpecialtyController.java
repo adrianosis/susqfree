@@ -25,16 +25,19 @@ public class SpecialtyController {
     private final CreateSpecialtyUseCase createSpecialtyUseCase;
     private final UpdateSpecialtyUseCase updateSpecialtyUseCase;
     private final DeleteSpecialtyUseCase deleteSpecialtyUseCase;
+    private final FindSpecialtyByIdUseCase findSpecialtyByIdUseCase;
     private final FindAllSpecialtiesUseCase findAllSpecialtiesUseCase;
 
     public SpecialtyController(
             CreateSpecialtyUseCase createSpecialtyUseCase,
             UpdateSpecialtyUseCase updateSpecialtyUseCase,
             DeleteSpecialtyUseCase deleteSpecialtyUseCase,
+            FindSpecialtyByIdUseCase findSpecialtyByIdUseCase,
             FindAllSpecialtiesUseCase findAllSpecialtiesUseCase) {
         this.createSpecialtyUseCase = createSpecialtyUseCase;
         this.updateSpecialtyUseCase = updateSpecialtyUseCase;
         this.deleteSpecialtyUseCase = deleteSpecialtyUseCase;
+        this.findSpecialtyByIdUseCase = findSpecialtyByIdUseCase;
         this.findAllSpecialtiesUseCase = findAllSpecialtiesUseCase;
     }
 
@@ -88,6 +91,13 @@ public class SpecialtyController {
         Specialty specialty = SpecialtyDtoMapper.toDomain(input, id);
         Specialty updatedSpecialty = updateSpecialtyUseCase.execute(specialty);
         return ResponseEntity.ok(SpecialtyDtoMapper.toOutput(updatedSpecialty));
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<SpecialtyOutput> findById(@PathVariable Long id) {
+        return findSpecialtyByIdUseCase.execute(id)
+                .map(specialty -> ResponseEntity.ok(SpecialtyDtoMapper.toOutput(specialty)))
+                .orElse(ResponseEntity.notFound().build());
     }
 
     @Operation(

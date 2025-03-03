@@ -1,0 +1,16 @@
+version: '1'
+services:
+  health-unit-management-db:
+    image: postgres:16
+    container_name: health-unit-management-db
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    ports:
+      - "${POSTGRES_PORT}:5432"
+    volumes:
+      - health_unit_management_data:/var/lib/postgresql/data
+
+volumes:
+  health_unit_management_data:

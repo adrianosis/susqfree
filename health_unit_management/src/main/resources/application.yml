@@ -3,7 +3,7 @@ spring:
     name: health-unit-management
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5432/health_unit_management
+    url: jdbc:postgresql://localhost:5440/health_unit_management
     username: postgres
     password: admin
 

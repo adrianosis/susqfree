@@ -1,0 +1,43 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1-create-service-unit-attendance-tables
+      author: angelovlima
+      changes:
+        - sqlFile:
+            path: db/changelog/sql/create_service_unit_attendance_tables.sql
+            encoding: UTF-8
+            splitStatements: true
+            endDelimiter: ";"
+
+  - changeSet:
+      id: 2-add-ticket-column-to-attendance
+      author: angelovlima
+      changes:
+        - addColumn:
+            tableName: attendance
+            columns:
+              - column:
+                  name: ticket
+                  type: VARCHAR(10)
+
+  - changeSet:
+      id: 3-alter-patient-id-to-uuid
+      author: angelovlima
+      changes:
+        - modifyDataType:
+            columnName: patient_id
+            newDataType: UUID
+            tableName: attendance
+        - modifyDataType:
+            columnName: patient_id
+            newDataType: UUID
+            tableName: attendance_history
+
+  - changeSet:
+      id: 4-add-unique-constraint-patient-attendance
+      author: angelovlima
+      changes:
+        - addUniqueConstraint:
+            columnNames: patient_id
+            tableName: attendance
+            constraintName: uq_patient_attendance

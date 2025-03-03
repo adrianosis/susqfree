@@ -1,0 +1,14 @@
+Auth URL
+https://us-east-2obmanzxss.auth.us-east-2.amazoncognito.com/oauth2/authorize
+
+Access Token URL
+https://us-east-2obmanzxss.auth.us-east-2.amazoncognito.com/oauth2/token
+
+Client ID
+o2qct2fnmfaigskmt24ppr3fj
+
+Client Secret
+a553vf8hd1juf1pp7br82imb000tj2d7u9kn9ij5dhuek7kt9h1
+
+Callback URL
+https://oauth.pstmn.io/v1/callback

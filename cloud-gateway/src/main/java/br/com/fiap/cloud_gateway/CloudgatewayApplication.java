@@ -24,6 +24,7 @@ public class CloudgatewayApplication {
 				.route( r -> r.path("/patient-management/**").filters(f -> f.stripPrefix(1)).uri("lb://patient-management"))
 				.route( r -> r.path("/schedule-management/**").filters(f -> f.stripPrefix(1)).uri("lb://schedule-management"))
 				.route( r -> r.path("/triage-service/**").filters(f -> f.stripPrefix(1)).uri("lb://triage-service"))
+				.route( r -> r.path("/emergency-care/**").filters(f -> f.stripPrefix(1)).uri("lb://emergency-care"))
 				.build();
 	}
 

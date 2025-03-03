@@ -17,5 +17,7 @@ create table patient
     postal_code  char(8)     not null,
     latitude     numeric(9, 6),
     longitude    numeric(9, 6),
-    constraint patient_pk primary key (id)
+    constraint patient_pk primary key (id),
+    constraint patient_cpf_uq unique (cpf),
+    constraint patient_sus_number_uq unique (sus_number)
 );

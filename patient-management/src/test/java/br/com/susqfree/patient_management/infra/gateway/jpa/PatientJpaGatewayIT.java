@@ -1,5 +1,6 @@
 package br.com.susqfree.patient_management.infra.gateway.jpa;
 
+import br.com.susqfree.patient_management.domain.model.Address;
 import br.com.susqfree.patient_management.domain.model.Patient;
 import br.com.susqfree.patient_management.utils.PatientHelper;
 import org.junit.jupiter.api.BeforeEach;
@@ -7,9 +8,11 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -111,6 +114,41 @@ public class PatientJpaGatewayIT {
             assertThat(foundPatient.getAddress().getLatitude()).isEqualTo(patient.getAddress().getLatitude());
             assertThat(foundPatient.getAddress().getLongitude()).isEqualTo(patient.getAddress().getLongitude());
         });
+    }
+
+    @Test
+    public void shouldFindAllPatient() {
+        // Arrange
+        Address address = Address.builder()
+                .street("Av. Paulista")
+                .number("1400")
+                .district("Bela Vista")
+                .city("São Paulo")
+                .state("SP")
+                .postalCode("12345678")
+                .latitude(-23.562642)
+                .longitude(-46.654887)
+                .build();
+
+        Patient patient1 =  Patient.builder()
+                .id(UUID.randomUUID())
+                .name("Julia")
+                .gender("F")
+                .birthDate(LocalDate.of(2005, 6, 24))
+                .cpf("11133355511")
+                .susNumber("123412341230")
+                .phoneNumber("11999995555")
+                .mail("julia@test.com")
+                .address(address)
+                .build();
+
+        patientGateway.save(patient1);
+
+        // Act
+        var foundPatients = patientGateway.findAll(PageRequest.of(0, 10));
+
+        // Assert
+        assertThat(foundPatients).hasSize(2);
     }
 
 }

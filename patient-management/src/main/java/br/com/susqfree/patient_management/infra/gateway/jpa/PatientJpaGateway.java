@@ -2,18 +2,17 @@ package br.com.susqfree.patient_management.infra.gateway.jpa;
 
 import br.com.susqfree.patient_management.domain.gateway.PatientGateway;
 import br.com.susqfree.patient_management.domain.model.Patient;
-import br.com.susqfree.patient_management.infra.exceptions.PatientManagementException;
 import br.com.susqfree.patient_management.infra.gateway.jpa.entity.PatientEntity;
 import br.com.susqfree.patient_management.infra.gateway.jpa.mapper.PatientEntityMapper;
 import br.com.susqfree.patient_management.infra.gateway.jpa.repository.PatientRepository;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
 import java.util.Optional;
 import java.util.UUID;
 
-@Slf4j
 @Component
 @RequiredArgsConstructor
 public class PatientJpaGateway implements PatientGateway {
@@ -23,39 +22,31 @@ public class PatientJpaGateway implements PatientGateway {
 
     @Override
     public Patient save(Patient patient) {
-        try {
-            PatientEntity patientEntity = mapper.toEntity(patient);
-            patientEntity = repository.save(patientEntity);
+        PatientEntity patientEntity = mapper.toEntity(patient);
+        patientEntity = repository.save(patientEntity);
 
-            return mapper.toDomain(patientEntity);
-        } catch (Exception e) {
-            log.error(e.getMessage());
-            throw new PatientManagementException("Failed to access data repository");
-        }
+        return mapper.toDomain(patientEntity);
     }
 
     @Override
     public Optional<Patient> findById(UUID patientId) {
-        try {
-            Optional<PatientEntity> patientEntity = repository.findById(patientId);
+        Optional<PatientEntity> patientEntity = repository.findById(patientId);
 
-            return patientEntity.map(mapper::toDomain);
-        } catch (Exception e) {
-            log.error(e.getMessage());
-            throw new PatientManagementException("Failed to access data repository");
-        }
+        return patientEntity.map(mapper::toDomain);
     }
 
     @Override
     public Optional<Patient> findByCpf(String cpf) {
-        try {
-            Optional<PatientEntity> patientEntity = repository.findByCpf(cpf);
+        Optional<PatientEntity> patientEntity = repository.findByCpf(cpf);
 
-            return patientEntity.map(mapper::toDomain);
-        } catch (Exception e) {
-            log.error(e.getMessage());
-            throw new PatientManagementException("Failed to access data repository");
-        }
+        return patientEntity.map(mapper::toDomain);
+    }
+
+    @Override
+    public Page<Patient> findAll(Pageable pageable) {
+        Page<PatientEntity> patientEntity = repository.findAll(pageable);
+
+        return patientEntity.map(mapper::toDomain);
     }
 
 }

@@ -10,8 +10,12 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -146,6 +150,23 @@ public class PatientJpaGatewayTest {
             assertThat(foundPatient.getAddress().getState()).isEqualTo(patientEntity.getAddress().getState());
             assertThat(foundPatient.getAddress().getPostalCode()).isEqualTo(patientEntity.getAddress().getPostalCode());
         });
+    }
+
+    @Test
+    public void shouldFindAllPatient() {
+        // Arrange
+        PatientEntity patientEntity1 = PatientHelper.createPatientEntity(UUID.randomUUID());
+        PatientEntity patientEntity2 = PatientHelper.createPatientEntity(UUID.randomUUID());
+
+        when(patientRepository.findAll(any(Pageable.class))).thenReturn(new PageImpl<>(List.of(patientEntity1, patientEntity2)));
+
+        // Act
+        var foundPatients = patientGateway.findAll(PageRequest.of(0, 10));
+
+        // Assert
+        verify(patientRepository, times(1)).findAll(any(Pageable.class));
+
+        assertThat(foundPatients).hasSize(2);
     }
 
 }

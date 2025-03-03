@@ -3,11 +3,9 @@ package br.com.susqfree.patient_management.api.controller;
 import br.com.susqfree.patient_management.domain.input.CreatePatientInput;
 import br.com.susqfree.patient_management.domain.input.UpdatePatientInput;
 import br.com.susqfree.patient_management.domain.output.PatientOutput;
-import br.com.susqfree.patient_management.domain.usecase.CreatePatientUseCase;
-import br.com.susqfree.patient_management.domain.usecase.FindPatientByCpfUseCase;
-import br.com.susqfree.patient_management.domain.usecase.FindPatientByIdUseCase;
-import br.com.susqfree.patient_management.domain.usecase.UpdatePatientUseCase;
+import br.com.susqfree.patient_management.domain.usecase.*;
 import br.com.susqfree.patient_management.infra.exceptions.GlobalExceptionHandler;
+import br.com.susqfree.patient_management.infra.exceptions.PatientManagementException;
 import br.com.susqfree.patient_management.utils.PatientHelper;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
@@ -17,6 +15,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
@@ -25,9 +27,11 @@ import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.UUID;
 
 import static br.com.susqfree.patient_management.utils.JsonHelper.asJsonString;
+import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -47,11 +51,14 @@ public class PatientControllerTest {
     private FindPatientByIdUseCase findPatientByIdUseCase;
     @Mock
     private FindPatientByCpfUseCase findPatientByCpfUseCase;
+    @Mock
+    private FindAllPatientsUseCase findAllPatientsUseCase;
 
     @BeforeEach
     public void setup() {
         MockitoAnnotations.openMocks(this);
-        PatientController patientController = new PatientController(createPatientUseCase, updatePatientUseCase, findPatientByIdUseCase, findPatientByCpfUseCase);
+        PatientController patientController = new PatientController(createPatientUseCase, updatePatientUseCase,
+                findPatientByIdUseCase, findPatientByCpfUseCase, findAllPatientsUseCase);
 
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.registerModule(new JavaTimeModule());
@@ -217,6 +224,26 @@ public class PatientControllerTest {
     }
 
     @Test
+    public void shouldFindAllPatient() throws Exception {
+        // Arrange
+        PatientOutput patient1 = PatientHelper.createPatientOutput(UUID.randomUUID());
+        PatientOutput patient2 = PatientHelper.createPatientOutput(UUID.randomUUID());
+        Page<PatientOutput> page = new PageImpl<>(List.of(patient1, patient2), PageRequest.of(0,10), 2);
+
+        when(findAllPatientsUseCase.execute(any(Pageable.class))).thenReturn(page);
+
+        // Act
+        mockMvc.perform(get("/api/patient")
+                .queryParam("page", "0")
+                .queryParam("size", "10"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.content", hasSize(2)));
+
+        // Assert
+        verify(findAllPatientsUseCase, times(1)).execute(any(Pageable.class));
+    }
+
+    @Test
     void shouldReturnBadRequestWhenNameExceededSize() throws Exception {
         // Arrange
         var input =  CreatePatientInput.builder()
@@ -249,4 +276,21 @@ public class PatientControllerTest {
                 .andExpect(jsonPath("$.fieldErrors.name").value("size must be between 0 and 60"));
 
     }
+
+    @Test
+    public void shouldReturnBadRequest_WhenFindByCpf_WithInvalidCpf() throws Exception {
+        // Arrange
+        String cpf = "111";
+
+        when(findPatientByCpfUseCase.execute(anyString())).thenThrow(new PatientManagementException("Patient not found"));
+
+        // Act
+        ResultActions result = mockMvc.perform(get("/api/patient/cpf/{cpf}", cpf)
+                .contentType(MediaType.APPLICATION_JSON));
+
+        // Assert
+        result.andExpect(status().isInternalServerError())
+                .andExpect(jsonPath("$.message").value("Patient not found"));
+    }
+
 }

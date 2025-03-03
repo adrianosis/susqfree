@@ -1,12 +1,9 @@
 package br.com.susqfree.patient_management.api.controller;
 
+import br.com.susqfree.patient_management.domain.input.CreatePatientInput;
 import br.com.susqfree.patient_management.domain.input.UpdatePatientInput;
 import br.com.susqfree.patient_management.domain.output.PatientOutput;
-import br.com.susqfree.patient_management.domain.usecase.CreatePatientUseCase;
-import br.com.susqfree.patient_management.domain.input.CreatePatientInput;
-import br.com.susqfree.patient_management.domain.usecase.FindPatientByCpfUseCase;
-import br.com.susqfree.patient_management.domain.usecase.FindPatientByIdUseCase;
-import br.com.susqfree.patient_management.domain.usecase.UpdatePatientUseCase;
+import br.com.susqfree.patient_management.domain.usecase.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
@@ -14,6 +11,8 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,6 +28,7 @@ public class PatientController {
     private final UpdatePatientUseCase updatePatientUseCase;
     private final FindPatientByIdUseCase findPatientByIdUseCase;
     private final FindPatientByCpfUseCase findPatientByCpfUseCase;
+    private final FindAllPatientsUseCase findAllPatientsUseCase;
 
     @Operation(summary = "Create a new patient",
             description = "Create a new patient and return the created patient details",
@@ -85,6 +85,14 @@ public class PatientController {
     @GetMapping("/cpf/{cpf}")
     public ResponseEntity<PatientOutput> findByCpf(@PathVariable String cpf) {
         var output = findPatientByCpfUseCase.execute(cpf);
+
+        return ResponseEntity.ok(output);
+    }
+
+    @Operation(summary = "Find All Patient", description = "Retrieve all patients")
+    @GetMapping
+    public ResponseEntity<Page<PatientOutput>> findAll(Pageable pageable) {
+        var output = findAllPatientsUseCase.execute(pageable);
 
         return ResponseEntity.ok(output);
     }

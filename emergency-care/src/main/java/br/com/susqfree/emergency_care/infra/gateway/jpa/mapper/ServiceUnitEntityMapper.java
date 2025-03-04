@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 public class ServiceUnitEntityMapper {
 
     public ServiceUnit toDomain(ServiceUnitEntity entity) {
+        if (entity == null) return null;
         return new ServiceUnit(
                 entity.getId(),
                 entity.getServiceType(),
@@ -17,6 +18,7 @@ public class ServiceUnitEntityMapper {
     }
 
     public ServiceUnitEntity toEntity(ServiceUnit domain) {
+        if (domain == null) return null;
         return new ServiceUnitEntity(
                 domain.getId(),
                 domain.getServiceType(),

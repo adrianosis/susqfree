@@ -4,6 +4,7 @@ import br.com.susqfree.emergency_care.domain.gateway.ServiceUnitGateway;
 import br.com.susqfree.emergency_care.domain.model.ServiceUnit;
 import br.com.susqfree.emergency_care.infra.gateway.jpa.mapper.ServiceUnitEntityMapper;
 import br.com.susqfree.emergency_care.infra.gateway.jpa.repository.ServiceUnitRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;

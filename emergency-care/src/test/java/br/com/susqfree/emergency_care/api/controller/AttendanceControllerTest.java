@@ -5,9 +5,9 @@ import br.com.susqfree.emergency_care.api.dto.AttendanceOutput;
 import br.com.susqfree.emergency_care.api.mapper.AttendanceDtoMapper;
 import br.com.susqfree.emergency_care.config.exception.GlobalExceptionHandler;
 import br.com.susqfree.emergency_care.domain.enums.AttendanceStatus;
-import br.com.susqfree.emergency_care.domain.enums.PriorityLevel;
 import br.com.susqfree.emergency_care.domain.model.Attendance;
 import br.com.susqfree.emergency_care.domain.model.ServiceUnit;
+import br.com.susqfree.emergency_care.domain.model.TriageInput;
 import br.com.susqfree.emergency_care.domain.usecase.*;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
@@ -22,6 +22,7 @@ import org.springframework.http.converter.json.MappingJackson2HttpMessageConvert
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -98,15 +99,35 @@ class AttendanceControllerTest {
     @DisplayName("Deve criar um novo atendimento com sucesso")
     void shouldCreateAttendance() throws Exception {
         UUID patientId = UUID.randomUUID();
-        AttendanceInput input = createAttendanceInput(patientId);
+        Long serviceUnitId = 2L;
+
+        // Criando um TriageInput válido
+        TriageInput input = new TriageInput(
+                patientId,
+                "Dor intensa no peito",
+                "MENOS_DE_UM_DIA",
+                39.5,
+                "NORMAL",
+                "TAQUICARDIA",
+                "NORMAL",
+                "NORMAL",
+                List.of("DOR_PEITO", "FALTA_AR"),
+                "INTENSA",
+                "NAO",
+                List.of("HIPERTENSAO"),
+                List.of(),
+                "NAO",
+                List.of()
+        );
+
         Attendance attendance = createAttendance(patientId);
         AttendanceOutput output = createAttendanceOutput(attendance);
 
-        when(createAttendanceUseCase.execute(eq(patientId), eq(2L), eq(PriorityLevel.EMERGENCY)))
+        when(createAttendanceUseCase.execute(eq(patientId), eq(serviceUnitId), any(TriageInput.class)))
                 .thenReturn(attendance);
         when(mapper.toOutput(attendance)).thenReturn(output);
 
-        mockMvc.perform(post("/attendances")
+        mockMvc.perform(post("/attendances/{serviceUnitId}", serviceUnitId)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(input)))
                 .andExpect(status().isCreated())
@@ -115,8 +136,9 @@ class AttendanceControllerTest {
                 .andExpect(jsonPath("$.status").value(output.getStatus()))
                 .andExpect(jsonPath("$.ticket").value(output.getTicket()));
 
-        verify(createAttendanceUseCase, times(1)).execute(eq(patientId), eq(2L), eq(PriorityLevel.EMERGENCY));
+        verify(createAttendanceUseCase, times(1)).execute(eq(patientId), eq(serviceUnitId), any(TriageInput.class));
     }
+
 
     @Test
     @DisplayName("Deve chamar o próximo atendimento na fila")

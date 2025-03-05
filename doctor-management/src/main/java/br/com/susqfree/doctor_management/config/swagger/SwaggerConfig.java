@@ -1,4 +1,4 @@
-package br.com.susqfree.doctor_management.config;
+package br.com.susqfree.doctor_management.config.swagger;
 
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.info.Info;

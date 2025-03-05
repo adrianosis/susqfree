@@ -4,7 +4,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class CloudgatewayApplicationTests {
+class CloudGatewayApplicationTests {
 
 	@Test
 	void contextLoads() {
@@ -12,6 +12,6 @@ class CloudgatewayApplicationTests {
 
 	@Test
 	public void main() {
-		CloudgatewayApplication.main(new String[] {});
+		CloudGatewayApplication.main(new String[] {});
 	}
 }

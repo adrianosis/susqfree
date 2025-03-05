@@ -1,4 +1,4 @@
-package br.com.susqfree.schedule_management.infra.config;
+package br.com.fiap.triage_service.infra.config.swagger;
 
 import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;
@@ -9,20 +9,17 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class SwaggerConfig {
-
     @Bean
     public OpenAPI customOpenApi() {
-
         return new OpenAPI()
-                .components(new Components())
+                .components(new Components()
+                        .addSchemas("PageableObject", null))
                 .info(new Info()
-                        .title("API Schedule Management - FIAP")
-                        .description("Spring Boot API for schedule management.")
+                        .title("Triage Service")
+                        .description("SUSQFree - Triage Service")
                         .version("v1")
                         .contact(new Contact()
-                                .name("FIAP - Pós Tech")
-                                .url("https://on.fiap.com.br/")));
+                                .name("SUSQFree")));
 
     }
-
 }

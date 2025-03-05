@@ -11,6 +11,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -41,6 +42,7 @@ public class HealthUnitController {
                     )
             )
     )
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<HealthUnitOutput> create(@RequestBody @Valid HealthUnitInput input) {
         var output = createHealthUnitUseCase.execute(input);
         return ResponseEntity.ok(output);
@@ -76,6 +78,7 @@ public class HealthUnitController {
                     )
             )
     )
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<HealthUnitOutput> updateHealthUnit(@PathVariable Long id,
                                                              @RequestBody @Valid  HealthUnitInput input) {
         var output = updateHealthUnitUseCase.execute(id, input);

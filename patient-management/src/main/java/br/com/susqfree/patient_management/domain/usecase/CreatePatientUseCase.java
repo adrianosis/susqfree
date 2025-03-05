@@ -20,7 +20,7 @@ public class CreatePatientUseCase {
     private final PatientOutputMapper outputMapper;
 
     @Transactional(rollbackOn = Exception.class)
-    public PatientOutput execute(CreatePatientInput input) {
+    public PatientOutput execute(CreatePatientInput input, UUID patientId) {
         Address address = Address.builder()
                 .street(input.getStreet())
                 .number(input.getNumber())
@@ -34,7 +34,7 @@ public class CreatePatientUseCase {
                 .build();
 
         Patient patient = Patient.builder()
-                .id(UUID.randomUUID())
+                .id(patientId)
                 .name(input.getName())
                 .gender(input.getGender())
                 .birthDate(input.getBirthDate())

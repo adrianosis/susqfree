@@ -15,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
@@ -51,6 +52,7 @@ public class AppointmentController {
             )
     )
     @PostMapping
+    @PreAuthorize("hasRole('ADMIN') or #inputs.patientId.toString().equals(authentication.name)")
     public ResponseEntity<AppointmentOutput> schedule(@RequestBody @Valid ScheduleAppointmentInput inputs) {
         var output = scheduleAppointmentUseCase.execute(inputs);
 
@@ -91,6 +93,7 @@ public class AppointmentController {
     @Operation(summary = "Complete an Appointment",
             description = "Complete an appointment and return the completed appointment details")
     @PutMapping("/{appointmentId}/complete")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<AppointmentOutput> complete(@PathVariable UUID appointmentId) {
         var output = completeAppointmentUsecase.execute(appointmentId);
 
@@ -99,6 +102,7 @@ public class AppointmentController {
 
     @Operation(summary = "Find All Appointments by Patient ID and Period", description = "Retrieve all appointments by Patient ID and Period")
     @GetMapping("/patient/{patientId}")
+    @PreAuthorize("hasRole('ADMIN') or #patientId.toString().equals(authentication.name)")
     public ResponseEntity<List<AppointmentOutput>> findByPatientId(@PathVariable UUID patientId,
                                                                    @RequestParam LocalDateTime startDateTime,
                                                                    @RequestParam LocalDateTime endDateTime) {
@@ -109,6 +113,7 @@ public class AppointmentController {
 
     @Operation(summary = "Find All Appointments by Health Unit ID and Period", description = "Retrieve all appointments by Health Unit ID and Period")
     @GetMapping("/health-unit/{healthUnitId}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Page<AppointmentOutput>> findByHealthUnitId(@PathVariable long healthUnitId,
                                                                       @RequestParam LocalDateTime startDateTime,
                                                                       @RequestParam LocalDateTime endDateTime,

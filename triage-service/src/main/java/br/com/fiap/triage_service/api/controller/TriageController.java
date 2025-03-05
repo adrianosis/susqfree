@@ -10,7 +10,6 @@ import br.com.fiap.triage_service.domain.usecase.FindTriagesByPatientIdUseCase;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
-import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -20,6 +19,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -105,6 +105,7 @@ public class TriageController {
                     )
             }
     )
+    @PreAuthorize("hasRole('ADMIN') or #input.patientId.toString().equals(authentication.name)")
     public ResponseEntity<TriagePriorityOutput> create(@RequestBody @Valid TriageInput input) {
         TriagePriorityOutput output = createTriageUseCase.execute(input);
         return ResponseEntity.ok(output);
@@ -147,6 +148,7 @@ public class TriageController {
             @ApiResponse(responseCode = "404", description = "Patient not found"),
             @ApiResponse(responseCode = "500", description = "Internal server error")
     })
+    @PreAuthorize("hasRole('ADMIN') or #patientId.toString().equals(authentication.name)")
     public ResponseEntity<List<TriageOutput>> findTriagesByPatient(
             @PathVariable("patientId") UUID patientId) {
         List<TriageOutput> triages = findTriagesByPatientIdUseCase.execute(patientId);
@@ -166,6 +168,7 @@ public class TriageController {
                     content = @Content(mediaType = "application/json")),
             @ApiResponse(responseCode = "500", description = "Internal server error")
     })
+    @PreAuthorize("hasRole('ADMIN')")
     public Page<TriageOutput> findAllTriage(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,

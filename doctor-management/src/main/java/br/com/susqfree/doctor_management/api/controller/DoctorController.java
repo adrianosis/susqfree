@@ -12,6 +12,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -60,6 +61,7 @@ public class DoctorController {
             }
     )
     @PostMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<DoctorOutput> create(@RequestBody DoctorInput input) {
         DoctorOutput createdDoctor = DoctorDtoMapper.toOutput(createDoctorUseCase.execute(DoctorDtoMapper.toDomain(input, null)));
         return ResponseEntity.status(201).body(createdDoctor);
@@ -81,6 +83,7 @@ public class DoctorController {
             )
     )
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<DoctorOutput> update(@PathVariable Long id, @RequestBody DoctorInput input) {
         DoctorOutput updatedDoctor = DoctorDtoMapper.toOutput(updateDoctorUseCase.execute(DoctorDtoMapper.toDomain(input, id)));
         return ResponseEntity.ok(updatedDoctor);
@@ -123,8 +126,10 @@ public class DoctorController {
             }
     )
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         deleteDoctorUseCase.execute(id);
         return ResponseEntity.noContent().build();
     }
+
 }

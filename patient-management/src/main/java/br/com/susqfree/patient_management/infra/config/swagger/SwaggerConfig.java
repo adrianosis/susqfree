@@ -1,4 +1,4 @@
-package br.com.susqfree.health_unit_management.infra.config;
+package br.com.susqfree.patient_management.infra.config.swagger;
 
 import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;
@@ -9,16 +9,20 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class SwaggerConfig {
+
     @Bean
     public OpenAPI customOpenApi() {
+
         return new OpenAPI()
                 .components(new Components())
                 .info(new Info()
-                        .title("Health Unit Management")
-                        .description("SUSQFree - Health Unit Management")
+                        .title("API Patient Management - FIAP")
+                        .description("Spring Boot API for patient management.")
                         .version("v1")
                         .contact(new Contact()
-                                .name("SUSQFree")));
+                                .name("FIAP - Pós Tech")
+                                .url("https://on.fiap.com.br/")));
 
     }
+
 }

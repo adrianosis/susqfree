@@ -4,6 +4,7 @@ import br.com.susqfree.patient_management.domain.input.CreatePatientInput;
 import br.com.susqfree.patient_management.domain.input.UpdatePatientInput;
 import br.com.susqfree.patient_management.domain.output.PatientOutput;
 import br.com.susqfree.patient_management.domain.usecase.*;
+import br.com.susqfree.patient_management.infra.config.security.SecurityUtils;
 import br.com.susqfree.patient_management.infra.exceptions.GlobalExceptionHandler;
 import br.com.susqfree.patient_management.infra.exceptions.PatientManagementException;
 import br.com.susqfree.patient_management.utils.PatientHelper;
@@ -53,12 +54,14 @@ public class PatientControllerTest {
     private FindPatientByCpfUseCase findPatientByCpfUseCase;
     @Mock
     private FindAllPatientsUseCase findAllPatientsUseCase;
+    @Mock
+    private SecurityUtils securityUtils;
 
     @BeforeEach
     public void setup() {
         MockitoAnnotations.openMocks(this);
         PatientController patientController = new PatientController(createPatientUseCase, updatePatientUseCase,
-                findPatientByIdUseCase, findPatientByCpfUseCase, findAllPatientsUseCase);
+                findPatientByIdUseCase, findPatientByCpfUseCase, findAllPatientsUseCase, securityUtils);
 
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.registerModule(new JavaTimeModule());
@@ -83,9 +86,10 @@ public class PatientControllerTest {
         // Arrange
         PatientOutput patientOutput = PatientHelper.createPatientOutput(UUID.randomUUID());
 
-        CreatePatientInput input = PatientHelper.createPatientInput();
+        when(createPatientUseCase.execute(any(CreatePatientInput.class), any(UUID.class))).thenReturn(patientOutput);
+        when(securityUtils.getUserName()).thenReturn(UUID.randomUUID().toString());
 
-        when(createPatientUseCase.execute(any(CreatePatientInput.class))).thenReturn(patientOutput);
+        CreatePatientInput input = PatientHelper.createPatientInput();
 
         // Act
         mockMvc.perform(post("/api/patient")
@@ -109,7 +113,8 @@ public class PatientControllerTest {
                 .andExpect(jsonPath("$.longitude").value(patientOutput.getLongitude()));
 
         // Assert
-        verify(createPatientUseCase, times(1)).execute(any(CreatePatientInput.class));
+        verify(createPatientUseCase, times(1)).execute(any(CreatePatientInput.class), any(UUID.class));
+        verify(securityUtils, times(1)).getUserName();
     }
 
     @Test

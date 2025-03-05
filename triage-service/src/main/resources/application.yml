@@ -3,9 +3,9 @@ spring:
     name: triage-service
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5441/health_triage
+    url: jdbc:postgresql://localhost:5432/health_triage
     username: postgres
-    password: admin
+    password: 123456
   security:
     oauth2:
       resourceserver:

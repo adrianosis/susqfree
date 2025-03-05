@@ -10,6 +10,8 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import java.util.UUID;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.AdditionalAnswers.returnsFirstArg;
 import static org.mockito.ArgumentMatchers.any;
@@ -38,7 +40,7 @@ public class CreatePatientUseCaseTest {
         var input = PatientHelper.createPatientInput();
 
         // Act
-        var savedPatient = createPatientUseCase.execute(input);
+        var savedPatient = createPatientUseCase.execute(input, UUID.randomUUID());
 
         // Assert
         verify(patientGateway, times(1)).save(any(Patient.class));

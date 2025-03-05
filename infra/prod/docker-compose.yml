@@ -1,6 +1,7 @@
 version: '3'
 
 services:
+
   fiap_mongo_db_dev:
     image: mongo
     container_name: fiap_mongo_db_dev

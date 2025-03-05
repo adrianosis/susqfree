@@ -5,41 +5,42 @@ import br.com.susqfree.doctor_management.api.dto.SpecialtyOutput;
 import br.com.susqfree.doctor_management.domain.model.Specialty;
 import br.com.susqfree.doctor_management.domain.usecase.*;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.context.TestConfiguration;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Bean;
+import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.http.MediaType;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@SpringBootTest
-@AutoConfigureMockMvc
-class SpecialtyControllerTest {
+public class SpecialtyControllerTest {
 
-    @Autowired
     private MockMvc mockMvc;
 
-    @Autowired
+    @Mock
     private CreateSpecialtyUseCase createSpecialtyUseCase;
-
-    @Autowired
+    @Mock
     private UpdateSpecialtyUseCase updateSpecialtyUseCase;
-
-    @Autowired
+    @Mock
     private DeleteSpecialtyUseCase deleteSpecialtyUseCase;
-
-    @Autowired
+    @Mock
+    private FindSpecialtyByIdUseCase findSpecialtyByIdUseCase;
+    @Mock
     private FindAllSpecialtiesUseCase findAllSpecialtiesUseCase;
 
     private Specialty specialty;
@@ -49,7 +50,26 @@ class SpecialtyControllerTest {
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     @BeforeEach
-    void setUp() {
+    public void setup() {
+        MockitoAnnotations.openMocks(this);
+        SpecialtyController specialtyController = new SpecialtyController(createSpecialtyUseCase, updateSpecialtyUseCase,
+                deleteSpecialtyUseCase, findSpecialtyByIdUseCase, findAllSpecialtiesUseCase);
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.registerModule(new JavaTimeModule());
+        objectMapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
+        MappingJackson2HttpMessageConverter mappingJackson2HttpMessageConverter = new MappingJackson2HttpMessageConverter();
+        mappingJackson2HttpMessageConverter.setObjectMapper(objectMapper);
+
+        mockMvc = MockMvcBuilders.standaloneSetup(specialtyController)
+                .setCustomArgumentResolvers(new PageableHandlerMethodArgumentResolver())
+                .setMessageConverters(mappingJackson2HttpMessageConverter)
+                .addFilter((request, response, chain) -> {
+                    response.setCharacterEncoding("UTF-8");
+                    chain.doFilter(request, response);
+                }, "/*")
+                .build();
+
         specialty = new Specialty(1L, "Cardiologia", "Especialidade dedicada ao estudo do coração.");
         specialtyInput = new SpecialtyInput("Cardiologia", "Especialidade dedicada ao estudo do coração.");
         specialtyOutput = new SpecialtyOutput(1L, "Cardiologia", "Especialidade dedicada ao estudo do coração.");
@@ -119,4 +139,5 @@ class SpecialtyControllerTest {
             return Mockito.mock(FindAllSpecialtiesUseCase.class);
         }
     }
+
 }

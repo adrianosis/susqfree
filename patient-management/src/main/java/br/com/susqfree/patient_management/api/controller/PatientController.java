@@ -32,6 +32,7 @@ public class PatientController {
     private final FindPatientByIdUseCase findPatientByIdUseCase;
     private final FindPatientByCpfUseCase findPatientByCpfUseCase;
     private final FindAllPatientsUseCase findAllPatientsUseCase;
+    private final SecurityUtils securityUtils;
 
     @Operation(summary = "Create a new patient",
             description = "Create a new patient and return the created patient details",
@@ -49,7 +50,7 @@ public class PatientController {
     )
     @PostMapping
     public ResponseEntity<PatientOutput> create(@RequestBody @Valid CreatePatientInput input) {
-        UUID patientId = UUID.fromString(SecurityUtils.getUserName());
+        UUID patientId = UUID.fromString(securityUtils.getUserName());
         var output = createPatientUseCase.execute(input, patientId);
 
         return ResponseEntity.ok(output);

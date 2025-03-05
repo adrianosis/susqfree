@@ -5,18 +5,20 @@ import br.com.susqfree.doctor_management.api.dto.DoctorOutput;
 import br.com.susqfree.doctor_management.domain.model.Doctor;
 import br.com.susqfree.doctor_management.domain.usecase.*;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.context.TestConfiguration;
-import org.springframework.boot.test.context.TestComponent;
 import org.springframework.context.annotation.Bean;
+import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.util.List;
 import java.util.Optional;
@@ -24,28 +26,22 @@ import java.util.Optional;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@SpringBootTest
-@AutoConfigureMockMvc
-class DoctorControllerTest {
+public class DoctorControllerTest {
 
-    @Autowired
     private MockMvc mockMvc;
 
-    @Autowired
+    @Mock
     private CreateDoctorUseCase createDoctorUseCase;
-
-    @Autowired
+    @Mock
     private UpdateDoctorUseCase updateDoctorUseCase;
-
-    @Autowired
+    @Mock
     private DeleteDoctorUseCase deleteDoctorUseCase;
-
-    @Autowired
+    @Mock
     private FindDoctorByIdUseCase findDoctorByIdUseCase;
-
-    @Autowired
+    @Mock
     private FindDoctorsBySpecialtyUseCase findDoctorsBySpecialtyUseCase;
 
     private Doctor doctor;
@@ -55,7 +51,26 @@ class DoctorControllerTest {
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     @BeforeEach
-    void setUp() {
+    public void setup() {
+        MockitoAnnotations.openMocks(this);
+        DoctorController doctorController = new DoctorController(createDoctorUseCase, updateDoctorUseCase, deleteDoctorUseCase,
+                findDoctorByIdUseCase, findDoctorsBySpecialtyUseCase);
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.registerModule(new JavaTimeModule());
+        objectMapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
+        MappingJackson2HttpMessageConverter mappingJackson2HttpMessageConverter = new MappingJackson2HttpMessageConverter();
+        mappingJackson2HttpMessageConverter.setObjectMapper(objectMapper);
+
+        mockMvc = MockMvcBuilders.standaloneSetup(doctorController)
+                .setCustomArgumentResolvers(new PageableHandlerMethodArgumentResolver())
+                .setMessageConverters(mappingJackson2HttpMessageConverter)
+                .addFilter((request, response, chain) -> {
+                    response.setCharacterEncoding("UTF-8");
+                    chain.doFilter(request, response);
+                }, "/*")
+                .build();
+
         doctor = new Doctor(1L, "Dr. Carlos Silva", "123456-SP", "(11) 91234-5678", "carlos.silva@exemplo.com", List.of());
         doctorInput = new DoctorInput("Dr. Carlos Silva", "123456-SP", "(11) 91234-5678", "carlos.silva@exemplo.com", List.of(1L, 2L));
         doctorOutput = new DoctorOutput(1L, "Dr. Carlos Silva", "123456-SP", "(11) 91234-5678", "carlos.silva@exemplo.com", List.of(1L, 2L));

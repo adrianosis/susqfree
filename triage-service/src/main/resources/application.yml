@@ -6,6 +6,11 @@ spring:
     url: jdbc:postgresql://localhost:5441/health_triage
     username: postgres
     password: admin
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: https://cognito-idp.us-east-2.amazonaws.com/us-east-2_oBmAnzxsS
 
 springdoc:
   swagger-ui:

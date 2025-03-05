@@ -13,6 +13,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -61,6 +62,7 @@ public class SpecialtyController {
             }
     )
     @PostMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<SpecialtyOutput> create(@RequestBody SpecialtyInput input) {
         Specialty specialty = SpecialtyDtoMapper.toDomain(input, null);
         Specialty createdSpecialty = createSpecialtyUseCase.execute(specialty);
@@ -87,6 +89,7 @@ public class SpecialtyController {
             }
     )
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<SpecialtyOutput> update(@PathVariable Long id, @RequestBody SpecialtyInput input) {
         Specialty specialty = SpecialtyDtoMapper.toDomain(input, id);
         Specialty updatedSpecialty = updateSpecialtyUseCase.execute(specialty);
@@ -122,6 +125,7 @@ public class SpecialtyController {
             }
     )
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         deleteSpecialtyUseCase.execute(id);
         return ResponseEntity.noContent().build();

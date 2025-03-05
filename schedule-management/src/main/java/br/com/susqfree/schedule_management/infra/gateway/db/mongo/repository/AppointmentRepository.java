@@ -28,6 +28,7 @@ public interface AppointmentRepository extends MongoRepository<AppointmentDocume
                                                                       LocalDateTime endDateTime,
                                                                       Pageable pageable);
 
+    @Query("{ $and: [{ 'status': 'AVAILABLE' }, { 'healthUnit.id': ?0 }, { 'specialty.id': ?1 }] }")
     Page<AppointmentDocument> findAllByHealthUnitIdAndSpecialtyIdOrderByDateTime(long healthUnitId,
                                                                                  long specialtyId,
                                                                                  Pageable pageable);

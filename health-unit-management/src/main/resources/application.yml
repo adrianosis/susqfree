@@ -3,9 +3,14 @@ spring:
     name: health-unit-management
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5440/health_unit_management
+    url: jdbc:postgresql://localhost:5432/health_unit_management
     username: postgres
     password: admin
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: https://cognito-idp.us-east-2.amazonaws.com/us-east-2_oBmAnzxsS
 
 springdoc:
   swagger-ui:

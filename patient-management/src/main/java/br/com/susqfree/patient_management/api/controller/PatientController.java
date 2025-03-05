@@ -4,6 +4,7 @@ import br.com.susqfree.patient_management.domain.input.CreatePatientInput;
 import br.com.susqfree.patient_management.domain.input.UpdatePatientInput;
 import br.com.susqfree.patient_management.domain.output.PatientOutput;
 import br.com.susqfree.patient_management.domain.usecase.*;
+import br.com.susqfree.patient_management.infra.config.security.SecurityUtils;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
@@ -14,6 +15,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PostAuthorize;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
@@ -46,7 +49,8 @@ public class PatientController {
     )
     @PostMapping
     public ResponseEntity<PatientOutput> create(@RequestBody @Valid CreatePatientInput input) {
-        var output = createPatientUseCase.execute(input);
+        UUID patientId = UUID.fromString(SecurityUtils.getUserName());
+        var output = createPatientUseCase.execute(input, patientId);
 
         return ResponseEntity.ok(output);
     }
@@ -66,6 +70,7 @@ public class PatientController {
             )
     )
     @PutMapping("/{patientId}")
+    @PreAuthorize("hasRole('ADMIN') or #patientId.toString().equals(authentication.name)")
     public ResponseEntity<PatientOutput> update(@PathVariable UUID patientId,
                                                 @RequestBody @Valid UpdatePatientInput input) {
         var output = updatePatientUseCase.execute(patientId, input);
@@ -75,6 +80,7 @@ public class PatientController {
 
     @Operation(summary = "Find Patient by ID", description = "Retrieve a patient by ID")
     @GetMapping("/{patientId}")
+    @PreAuthorize("hasRole('ADMIN') or #patientId.toString().equals(authentication.name)")
     public ResponseEntity<PatientOutput> findById(@PathVariable UUID patientId) {
         var output = findPatientByIdUseCase.execute(patientId);
 
@@ -83,6 +89,7 @@ public class PatientController {
 
     @Operation(summary = "Find Patient by CPF", description = "Retrieve a patient by CPF")
     @GetMapping("/cpf/{cpf}")
+    @PostAuthorize("hasRole('ADMIN') or returnObject.body.id.toString().equals(authentication.name)")
     public ResponseEntity<PatientOutput> findByCpf(@PathVariable String cpf) {
         var output = findPatientByCpfUseCase.execute(cpf);
 
@@ -91,6 +98,7 @@ public class PatientController {
 
     @Operation(summary = "Find All Patient", description = "Retrieve all patients")
     @GetMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Page<PatientOutput>> findAll(Pageable pageable) {
         var output = findAllPatientsUseCase.execute(pageable);
 

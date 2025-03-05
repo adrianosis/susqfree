@@ -14,6 +14,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
@@ -44,6 +45,7 @@ public class DoctorAppointmentController {
             )
     )
     @PostMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<AppointmentOutput>> createDoctorAppointments(@RequestBody @Valid List<CreateAppointmentInput> inputs) {
         var output = createDoctorAppointmentsUseCase.execute(inputs);
 
@@ -65,6 +67,7 @@ public class DoctorAppointmentController {
             )
     )
     @DeleteMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<AppointmentOutput>> cancelDoctorAppointments(@RequestBody @Valid CancelDoctorAppointmentsInput input) {
         var output = cancelDoctorAppointmentsUseCase.execute(input);
 
@@ -73,6 +76,7 @@ public class DoctorAppointmentController {
 
     @Operation(summary = "Find All Appointments by Doctor ID and Period", description = "Retrieve all appointments by Doctor ID and Period")
     @GetMapping("/{doctorId}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<AppointmentOutput>> cancelDoctorAppointments(@PathVariable long doctorId,
                                                                             @RequestParam LocalDateTime startDateTime,
                                                                             @RequestParam LocalDateTime endDateTime) {

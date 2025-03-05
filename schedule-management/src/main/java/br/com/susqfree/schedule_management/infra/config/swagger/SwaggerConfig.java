@@ -1,4 +1,4 @@
-package br.com.susqfree.patient_management.infra.config;
+package br.com.susqfree.schedule_management.infra.config.swagger;
 
 import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;
@@ -16,8 +16,8 @@ public class SwaggerConfig {
         return new OpenAPI()
                 .components(new Components())
                 .info(new Info()
-                        .title("API Patient Management - FIAP")
-                        .description("Spring Boot API for patient management.")
+                        .title("API Schedule Management - FIAP")
+                        .description("Spring Boot API for schedule management.")
                         .version("v1")
                         .contact(new Contact()
                                 .name("FIAP - Pós Tech")

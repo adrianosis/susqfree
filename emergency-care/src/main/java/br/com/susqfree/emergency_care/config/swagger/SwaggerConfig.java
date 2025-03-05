@@ -1,4 +1,4 @@
-package br.com.susqfree.emergency_care.config;
+package br.com.susqfree.emergency_care.config.swagger;
 
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.info.Info;

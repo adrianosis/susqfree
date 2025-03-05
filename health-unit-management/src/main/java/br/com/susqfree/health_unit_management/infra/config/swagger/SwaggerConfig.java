@@ -1,4 +1,4 @@
-package br.com.fiap.triage_service.infra.config;
+package br.com.susqfree.health_unit_management.infra.config.swagger;
 
 import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;
@@ -12,11 +12,10 @@ public class SwaggerConfig {
     @Bean
     public OpenAPI customOpenApi() {
         return new OpenAPI()
-                .components(new Components()
-                        .addSchemas("PageableObject", null))
+                .components(new Components())
                 .info(new Info()
-                        .title("Triage Service")
-                        .description("SUSQFree - Triage Service")
+                        .title("Health Unit Management")
+                        .description("SUSQFree - Health Unit Management")
                         .version("v1")
                         .contact(new Contact()
                                 .name("SUSQFree")));

@@ -9,6 +9,7 @@ import br.com.susqfree.emergency_care.domain.usecase.ListAllServiceUnitsUseCase;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -37,6 +38,7 @@ public class ServiceUnitController {
 
     @Operation(summary = "Register Service Unit", description = "Registers a new service unit")
     @PostMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ServiceUnitOutput> create(@RequestBody ServiceUnitInput input) {
         var serviceUnit = createServiceUnitUseCase.execute(mapper.toDomain(input));
         return ResponseEntity.status(201).body(mapper.toOutput(serviceUnit));
@@ -59,4 +61,5 @@ public class ServiceUnitController {
                 .toList();
         return ResponseEntity.ok(units);
     }
+
 }

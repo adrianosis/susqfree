@@ -22,13 +22,13 @@ The initiative aims to solve not just a logistical issue but also to humanize pa
 - **Security:** Amazon Cognito, OAuth2, JWT
 - **Infrastructure:** Spring Cloud Eureka, Spring Cloud Gateway
 
-## 3. Architecture
+## 4. Architecture
 The system follows a **Clean Architecture** approach and is divided into multiple microservices, each responsible for a specific functionality.
 
-## 4. System Features
+## 5. System Features
 
-### 4.1 Doctor Management Microservice (**doctor-management**)
-**Purpose:** Manages doctors, their qualifications, and specialties.
+### 5.1 Doctor Management Microservice (**doctor-management**)
+**Purpose:** Manages doctors and their specialties.
 
 **Endpoints:**
 - **Doctors:**
@@ -44,7 +44,7 @@ The system follows a **Clean Architecture** approach and is divided into multipl
   - `PUT /api/specialties/{id}` - Updates a specialty.
   - `DELETE /api/specialties/{id}` - Removes a specialty.
 
-### 4.2 Health Unit Management Microservice (**health-unit-management**)
+### 5.2 Health Unit Management Microservice (**health-unit-management**)
 **Purpose:** Manages basic information and locations of health units.
 
 **Endpoints:**
@@ -53,8 +53,8 @@ The system follows a **Clean Architecture** approach and is divided into multipl
 - `GET /api/health-unit/{id}` - Retrieves a specific health unit.
 - `PUT /api/health-unit/{id}` - Updates a health unit.
 
-### 4.3 Patient Management Microservice (**patient-management**)
-**Purpose:** Manages patients, storing personal and medical information.
+### 5.3 Patient Management Microservice (**patient-management**)
+**Purpose:** Manages patients, storing basic personal information.
 
 **Endpoints:**
 - `POST /api/patient` - Creates a new patient.
@@ -63,7 +63,7 @@ The system follows a **Clean Architecture** approach and is divided into multipl
 - `GET /api/patient/cpf/{cpf}` - Retrieves a patient by CPF.
 - `PUT /api/patient/{id}` - Updates a specific patient.
 
-### 4.4 Appointment Scheduling Microservice (**schedule-management**)
+### 5.4 Appointment Scheduling Microservice (**schedule-management**)
 **Purpose:** Manages medical appointment scheduling.
 
 **Endpoints:**
@@ -79,7 +79,7 @@ The system follows a **Clean Architecture** approach and is divided into multipl
   - `DELETE /api/appointments/doctor` - Cancels doctor appointments.
   - `GET /api/appointments/doctor/{doctorId}` - Lists appointments for a doctor.
 
-### 4.5 Triage Microservice (**triage-service**)
+### 5.5 Triage Microservice (**triage-service**)
 **Purpose:** Manages patient triage processes.
 
 **Endpoints:**
@@ -88,7 +88,7 @@ The system follows a **Clean Architecture** approach and is divided into multipl
 - `GET /triage/questions` - Returns triage questions.
 - `GET /triage/by-patient/{patientId}` - Lists triages for a patient.
 
-### 4.6 Emergency Care Microservice (**emergency-care-service**)
+### 5.6 Emergency Care Microservice (**emergency-care-service**)
 **Purpose:** Manages emergency care and patient prioritization.
 
 **Endpoints:**
@@ -101,13 +101,13 @@ The system follows a **Clean Architecture** approach and is divided into multipl
   - `GET /service-units/{id}` - Retrieves a service unit by ID.
   - `GET /service-units` - Lists all service units.
 
-### 4.7 Eureka Server Microservice
+### 5.7 Eureka Server Microservice
 **Purpose:** Discovery service for dynamic microservice registration.
 
-### 4.8 Cloud Gateway Microservice
+### 5.8 Cloud Gateway Microservice
 **Purpose:** Central entry point for requests, with authentication via Amazon Cognito and OAuth2.
 
-## 5. Getting Started
+## 6. Getting Started
 To set up the project locally:
 
 1. Clone the repository:

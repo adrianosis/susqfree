@@ -111,17 +111,12 @@ The system follows a **Clean Architecture** approach and is divided into multipl
 To set up the project locally:
 
 1. Clone the repository:
-2. Configure the environment variables for each microservice.
-3. Start the required databases using Docker:
+2. Start the required databases using Docker  (from `infra/docker`) :
    ```sh
    docker-compose up -d
    ```
-4. Run each microservice using your preferred IDE or:
+3. Run each microservice using your preferred IDE or:
    ```sh
    mvn spring-boot:run
-   ```
-5. Access the APIs via Swagger UI at:
-   ```sh
-   /swagger-ui.html
    ```
 

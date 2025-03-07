@@ -166,7 +166,7 @@ public class AttendanceController {
     }
 
     @Operation(summary = "Complete Attendance", description = "Marks an attendance as completed and moves it to history")
-    @DeleteMapping("/{id}/complete")
+    @PutMapping("/{id}/complete")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> completeAttendance(@PathVariable Long id) {
         completeAttendanceUseCase.execute(id);

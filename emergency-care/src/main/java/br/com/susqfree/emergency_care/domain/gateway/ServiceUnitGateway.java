@@ -11,5 +11,6 @@ public interface ServiceUnitGateway {
 
     Optional<ServiceUnit> findById(Long id);
 
-    List<ServiceUnit> findAll();
+    List<ServiceUnit> findAllByUnitId(Long unitId);
+
 }

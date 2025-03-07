@@ -4,7 +4,6 @@ import br.com.susqfree.emergency_care.domain.gateway.ServiceUnitGateway;
 import br.com.susqfree.emergency_care.domain.model.ServiceUnit;
 import br.com.susqfree.emergency_care.infra.gateway.jpa.mapper.ServiceUnitEntityMapper;
 import br.com.susqfree.emergency_care.infra.gateway.jpa.repository.ServiceUnitRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -33,10 +32,11 @@ public class ServiceUnitJpaGateway implements ServiceUnitGateway {
     }
 
     @Override
-    public List<ServiceUnit> findAll() {
-        return repository.findAll()
+    public List<ServiceUnit> findAllByUnitId(Long unitId) {
+        return repository.findAllByUnitId(unitId)
                 .stream()
                 .map(mapper::toDomain)
                 .collect(Collectors.toList());
     }
+
 }

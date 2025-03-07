@@ -9,6 +9,6 @@ public interface HealthUnitGateway {
     HealthUnit save(HealthUnit healthUnit);
     HealthUnit update(Long id, HealthUnit healthUnit);
     HealthUnit findById(Long id);
-    List<HealthUnit> findAll();
+    List<HealthUnit> findAllByCityAndState(String city, String state);
 
 }

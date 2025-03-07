@@ -5,6 +5,7 @@ import br.com.susqfree.schedule_management.domain.gateway.DoctorGateway;
 import br.com.susqfree.schedule_management.domain.gateway.HealthUnitGateway;
 import br.com.susqfree.schedule_management.domain.gateway.SpecialtyGateway;
 import br.com.susqfree.schedule_management.domain.input.CreateAppointmentInput;
+import br.com.susqfree.schedule_management.domain.input.CreateAppointmentPeriodInput;
 import br.com.susqfree.schedule_management.domain.mapper.AppointmentOutputMapper;
 import br.com.susqfree.schedule_management.domain.model.Appointment;
 import br.com.susqfree.schedule_management.domain.model.Doctor;
@@ -64,24 +65,23 @@ public class CreateDoctorAppointmentsUseCaseTest {
                 .thenReturn(List.of());
         when(appointmentGateway.saveAll(anyList())).thenAnswer(returnsFirstArg());
 
+
         var input = CreateAppointmentInput.builder()
                 .doctorId(1L)
                 .healthUnitId(1L)
                 .specialtyId(1L)
-                .startDateTime(LocalDateTime.of(2025,2,24,8,0))
-                .endDateTime(LocalDateTime.of(2025,2,24,12,0))
-                .build();
-        var input2 = CreateAppointmentInput.builder()
-                .doctorId(1L)
-                .healthUnitId(1L)
-                .specialtyId(1L)
-                .startDateTime(LocalDateTime.of(2025,2,24,13,0))
-                .endDateTime(LocalDateTime.of(2025,2,24,17,0))
-                .build();
-        var inputs = List.of(input,input2);
+                .periods(List.of(CreateAppointmentPeriodInput.builder()
+                        .startDateTime(LocalDateTime.of(2025,2,24,8,0))
+                        .endDateTime(LocalDateTime.of(2025,2,24,12,0))
+                        .build(),
+                        CreateAppointmentPeriodInput.builder()
+                                .startDateTime(LocalDateTime.of(2025,2,24,13,0))
+                                .endDateTime(LocalDateTime.of(2025,2,24,17,0))
+                                .build()
+                )).build();
 
         // Act
-        var savedAppointments = createDoctorAppointmentsUseCase.execute(inputs);
+        var savedAppointments = createDoctorAppointmentsUseCase.execute(input);
 
         // Assert
         verify(doctorGateway, times(1)).findById(anyLong());
@@ -111,14 +111,16 @@ public class CreateDoctorAppointmentsUseCaseTest {
                 .doctorId(1L)
                 .healthUnitId(1L)
                 .specialtyId(1L)
-                .startDateTime(LocalDateTime.of(2025,2,24,8,0))
-                .endDateTime(LocalDateTime.of(2025,2,24,12,0))
-                .build();
+                .periods(List.of(CreateAppointmentPeriodInput.builder()
+                        .startDateTime(LocalDateTime.of(2025,2,24,8,0))
+                        .endDateTime(LocalDateTime.of(2025,2,24,12,0))
+                        .build()
+                )).build();
 
         // Act
         // Assert
         assertThatThrownBy(
-                () -> createDoctorAppointmentsUseCase.execute(List.of(input)))
+                () -> createDoctorAppointmentsUseCase.execute(input))
                 .isInstanceOf(AppointmentException.class)
                 .hasMessage("Already existing appointment");
 

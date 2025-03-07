@@ -5,6 +5,7 @@ import br.com.susqfree.schedule_management.domain.gateway.DoctorGateway;
 import br.com.susqfree.schedule_management.domain.gateway.HealthUnitGateway;
 import br.com.susqfree.schedule_management.domain.gateway.SpecialtyGateway;
 import br.com.susqfree.schedule_management.domain.input.CreateAppointmentInput;
+import br.com.susqfree.schedule_management.domain.input.CreateAppointmentPeriodInput;
 import br.com.susqfree.schedule_management.domain.mapper.AppointmentOutputMapper;
 import br.com.susqfree.schedule_management.domain.model.Appointment;
 import br.com.susqfree.schedule_management.domain.model.Doctor;
@@ -29,25 +30,25 @@ public class CreateDoctorAppointmentsUseCase {
     private final SpecialtyGateway specialtyGateway;
     private final AppointmentOutputMapper mapper;
 
-    public List<AppointmentOutput> execute(List<CreateAppointmentInput> inputs) {
+    public List<AppointmentOutput> execute(CreateAppointmentInput input) {
         List<Appointment> appointments = new ArrayList<>();
-        Doctor doctor = doctorGateway.findById(inputs.get(0).getDoctorId())
+        Doctor doctor = doctorGateway.findById(input.getDoctorId())
                 .orElseThrow(() -> new AppointmentException("Doctor not found"));
-        HealthUnit healthUnit = healthUnitGateway.findById(inputs.get(0).getHealthUnitId())
+        HealthUnit healthUnit = healthUnitGateway.findById(input.getHealthUnitId())
                 .orElseThrow(() -> new AppointmentException("HealthUnit not found"));
-        Specialty specialty = specialtyGateway.findById(inputs.get(0).getSpecialtyId())
+        Specialty specialty = specialtyGateway.findById(input.getSpecialtyId())
                 .orElseThrow(() -> new AppointmentException("Specialty not found"));
 
 
-        for (CreateAppointmentInput input : inputs) {
-            var existingAppointments = appointmentGateway.findAllByDoctorIdAndDateTimeBetween(doctor.getId(), input.getStartDateTime(), input.getEndDateTime());
+        for (CreateAppointmentPeriodInput period : input.getPeriods()) {
+            var existingAppointments = appointmentGateway.findAllByDoctorIdAndDateTimeBetween(doctor.getId(), period.getStartDateTime(), period.getEndDateTime());
 
             if (!existingAppointments.isEmpty()) {
                 throw new AppointmentException("Already existing appointment");
             }
 
-            LocalDateTime dateTime = input.getStartDateTime();
-            while (dateTime.isBefore(input.getEndDateTime())) {
+            LocalDateTime dateTime = period.getStartDateTime();
+            while (dateTime.isBefore(period.getEndDateTime())) {
                 Appointment appointment = Appointment.builder()
                         .dateTime(dateTime)
                         .doctor(doctor)

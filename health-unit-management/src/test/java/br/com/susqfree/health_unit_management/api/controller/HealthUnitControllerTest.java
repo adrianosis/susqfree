@@ -3,7 +3,7 @@ package br.com.susqfree.health_unit_management.api.controller;
 import br.com.susqfree.health_unit_management.domain.input.HealthUnitInput;
 import br.com.susqfree.health_unit_management.domain.output.HealthUnitOutput;
 import br.com.susqfree.health_unit_management.domain.usecase.CreateHealthUnitUseCase;
-import br.com.susqfree.health_unit_management.domain.usecase.FindAllHealthUnitsUseCase;
+import br.com.susqfree.health_unit_management.domain.usecase.FindAllHealthUnitsByCityAndStateUseCase;
 import br.com.susqfree.health_unit_management.domain.usecase.FindHealthUnitByIdUseCase;
 import br.com.susqfree.health_unit_management.domain.usecase.UpdateHealthUnitUseCase;
 import br.com.susqfree.health_unit_management.infra.exception.GlobalExceptionHandler;
@@ -40,13 +40,13 @@ class HealthUnitControllerTest {
     @Mock
     private FindHealthUnitByIdUseCase findHealthUnitByIdUsecase;
     @Mock
-    private FindAllHealthUnitsUseCase findAllHealthUnitsUseCase;
+    private FindAllHealthUnitsByCityAndStateUseCase findAllHealthUnitsByCityAndStateUseCase;
 
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
         HealthUnitController healthUnitController = new HealthUnitController(createHealthUnitUseCase,
-                findHealthUnitByIdUsecase,findAllHealthUnitsUseCase,updateHealthUnitUseCase);
+                findHealthUnitByIdUsecase, findAllHealthUnitsByCityAndStateUseCase,updateHealthUnitUseCase);
         mockMvc = MockMvcBuilders.standaloneSetup(healthUnitController)
                 .setControllerAdvice(new GlobalExceptionHandler())
                 .addFilter((request, response, chain) -> {
@@ -116,24 +116,26 @@ class HealthUnitControllerTest {
     }
 
     @Test
-    void shouldFindAllHealthUnits() throws Exception {
+    void shouldFindAllHealthUnitsByCityAndState() throws Exception {
         // Arrange
         List<HealthUnitOutput> healthUnits = List.of(
                 HealthUnitHelper.createHealthUnitOutput(1L),
                 HealthUnitHelper.createHealthUnitOutput(2L)
         );
 
-        when(findAllHealthUnitsUseCase.execute()).thenReturn(healthUnits);
+        when(findAllHealthUnitsByCityAndStateUseCase.execute(anyString(), anyString())).thenReturn(healthUnits);
 
         // Act & Assert
-        mockMvc.perform(get("/health-unit"))
+        mockMvc.perform(get("/health-unit")
+                        .queryParam("city", "São Paulo")
+                        .queryParam("state", "SP"))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.length()").value(healthUnits.size()))
                 .andExpect(jsonPath("$[0].name").value(healthUnits.get(0).getName()))
                 .andExpect(jsonPath("$[1].name").value(healthUnits.get(1).getName()));
 
-        verify(findAllHealthUnitsUseCase, times(1)).execute();
+        verify(findAllHealthUnitsByCityAndStateUseCase, times(1)).execute(anyString(), anyString());
     }
 
     @Test

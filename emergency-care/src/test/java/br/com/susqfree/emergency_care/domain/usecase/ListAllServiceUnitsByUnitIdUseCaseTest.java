@@ -12,9 +12,9 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 
-class ListAllServiceUnitsUseCaseTest {
+class ListAllServiceUnitsByUnitIdUseCaseTest {
 
-    private ListAllServiceUnitsUseCase listAllServiceUnitsUseCase;
+    private ListAllServiceUnitsByUnitIdUseCase listAllServiceUnitsByUnitIdUseCase;
 
     @Mock
     private ServiceUnitGateway serviceUnitGateway;
@@ -24,31 +24,31 @@ class ListAllServiceUnitsUseCaseTest {
     @BeforeEach
     void setup() {
         openMocks = MockitoAnnotations.openMocks(this);
-        listAllServiceUnitsUseCase = new ListAllServiceUnitsUseCase(serviceUnitGateway);
+        listAllServiceUnitsByUnitIdUseCase = new ListAllServiceUnitsByUnitIdUseCase(serviceUnitGateway);
     }
 
     @Test
-    void shouldReturnAllServiceUnits() {
+    void shouldReturnAllServiceUnitsByUnitId() {
         List<ServiceUnit> serviceUnits = List.of(
                 new ServiceUnit(1L, "Emergency", 50, 10L),
                 new ServiceUnit(2L, "Urgency", 30, 20L)
         );
 
-        when(serviceUnitGateway.findAll()).thenReturn(serviceUnits);
+        when(serviceUnitGateway.findAllByUnitId(anyLong())).thenReturn(serviceUnits);
 
-        List<ServiceUnit> result = listAllServiceUnitsUseCase.execute();
+        List<ServiceUnit> result = listAllServiceUnitsByUnitIdUseCase.execute(anyLong());
 
         assertThat(result).hasSize(2).containsExactlyElementsOf(serviceUnits);
-        verify(serviceUnitGateway, times(1)).findAll();
+        verify(serviceUnitGateway, times(1)).findAllByUnitId(anyLong());
     }
 
     @Test
     void shouldReturnEmptyListWhenNoServiceUnitsExist() {
-        when(serviceUnitGateway.findAll()).thenReturn(List.of());
+        when(serviceUnitGateway.findAllByUnitId(anyLong())).thenReturn(List.of());
 
-        List<ServiceUnit> result = listAllServiceUnitsUseCase.execute();
+        List<ServiceUnit> result = listAllServiceUnitsByUnitIdUseCase.execute(anyLong());
 
         assertThat(result).isEmpty();
-        verify(serviceUnitGateway, times(1)).findAll();
+        verify(serviceUnitGateway, times(1)).findAllByUnitId(anyLong());
     }
 }

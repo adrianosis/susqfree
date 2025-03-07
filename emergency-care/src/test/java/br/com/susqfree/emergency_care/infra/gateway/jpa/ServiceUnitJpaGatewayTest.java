@@ -83,20 +83,20 @@ class ServiceUnitJpaGatewayTest {
 
     @Test
     @DisplayName("Deve listar todas as unidades de serviço")
-    void shouldFindAllServiceUnits() {
+    void shouldFindAllServiceUnitsByUnitId() {
         var serviceUnit1 = new ServiceUnit(1L, "Emergency Unit", 100, 10L);
         var serviceUnit2 = new ServiceUnit(2L, "General Clinic", 200, 20L);
 
         var entity1 = new ServiceUnitEntity(1L, "Emergency Unit", 100, 10L);
         var entity2 = new ServiceUnitEntity(2L, "General Clinic", 200, 20L);
 
-        when(repository.findAll()).thenReturn(List.of(entity1, entity2));
+        when(repository.findAllByUnitId(anyLong())).thenReturn(List.of(entity1, entity2));
         when(mapper.toDomain(entity1)).thenReturn(serviceUnit1);
         when(mapper.toDomain(entity2)).thenReturn(serviceUnit2);
 
-        var serviceUnits = serviceUnitJpaGateway.findAll();
+        var serviceUnits = serviceUnitJpaGateway.findAllByUnitId(1L);
 
-        verify(repository, times(1)).findAll();
+        verify(repository, times(1)).findAllByUnitId(anyLong());
         assertThat(serviceUnits).hasSize(2);
         assertThat(serviceUnits.get(0).getId()).isEqualTo(serviceUnit1.getId());
         assertThat(serviceUnits.get(1).getId()).isEqualTo(serviceUnit2.getId());

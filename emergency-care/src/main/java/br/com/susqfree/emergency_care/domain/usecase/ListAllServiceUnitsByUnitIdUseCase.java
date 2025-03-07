@@ -7,15 +7,16 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class ListAllServiceUnitsUseCase {
+public class ListAllServiceUnitsByUnitIdUseCase {
 
     private final ServiceUnitGateway serviceUnitGateway;
 
-    public ListAllServiceUnitsUseCase(ServiceUnitGateway serviceUnitGateway) {
+    public ListAllServiceUnitsByUnitIdUseCase(ServiceUnitGateway serviceUnitGateway) {
         this.serviceUnitGateway = serviceUnitGateway;
     }
 
-    public List<ServiceUnit> execute() {
-        return serviceUnitGateway.findAll();
+    public List<ServiceUnit> execute(Long unitId) {
+        return serviceUnitGateway.findAllByUnitId(unitId);
     }
+
 }

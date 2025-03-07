@@ -24,7 +24,7 @@ public class HealthUnitController {
 
     private final CreateHealthUnitUseCase createHealthUnitUseCase;
     private final FindHealthUnitByIdUseCase findHealthUnitByIdUsecase;
-    private final FindAllHealthUnitsUseCase findAllHealthUnitsUseCase;
+    private final FindAllHealthUnitsByCityAndStateUseCase findAllHealthUnitsByCityAndStateUseCase;
     private final UpdateHealthUnitUseCase updateHealthUnitUseCase;
 
     @PostMapping
@@ -56,9 +56,10 @@ public class HealthUnitController {
     }
 
     @GetMapping
-    @Operation(summary = "Get all health units", description = "Retrieve all health units")
-    public ResponseEntity<List<HealthUnitOutput>> findAllHealthUnits() {
-        var output = findAllHealthUnitsUseCase.execute();
+    @Operation(summary = "Get all health units by city and state", description = "Retrieve all health units by city and state")
+    public ResponseEntity<List<HealthUnitOutput>> findAllHealthUnitsByCityAndState(@RequestParam String city,
+                                                                                   @RequestParam String state) {
+        var output = findAllHealthUnitsByCityAndStateUseCase.execute(city, state);
         return ResponseEntity.ok(output);
     }
 

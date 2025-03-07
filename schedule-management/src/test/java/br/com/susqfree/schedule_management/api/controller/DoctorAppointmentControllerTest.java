@@ -2,6 +2,7 @@ package br.com.susqfree.schedule_management.api.controller;
 
 import br.com.susqfree.schedule_management.domain.input.CancelDoctorAppointmentsInput;
 import br.com.susqfree.schedule_management.domain.input.CreateAppointmentInput;
+import br.com.susqfree.schedule_management.domain.input.CreateAppointmentPeriodInput;
 import br.com.susqfree.schedule_management.domain.model.Status;
 import br.com.susqfree.schedule_management.domain.output.AppointmentOutput;
 import br.com.susqfree.schedule_management.domain.usecase.CancelDoctorAppointmentsUseCase;
@@ -82,21 +83,23 @@ public class DoctorAppointmentControllerTest {
                 .doctorId(1L)
                 .healthUnitId(1L)
                 .specialtyId(1L)
-                .startDateTime(LocalDateTime.of(2025, 2, 24, 8, 0))
-                .endDateTime(LocalDateTime.of(2025, 2, 24, 12, 0))
-                .build();
+                .periods(List.of(CreateAppointmentPeriodInput.builder()
+                        .startDateTime(LocalDateTime.of(2025, 2, 24, 8, 0))
+                        .endDateTime(LocalDateTime.of(2025, 2, 24, 12, 0))
+                        .build()
+                )).build();
 
-        when(createDoctorAppointmentsUseCase.execute(anyList())).thenReturn(List.of(appointmentOutput1, appointmentOutput2));
+        when(createDoctorAppointmentsUseCase.execute(any(CreateAppointmentInput.class))).thenReturn(List.of(appointmentOutput1, appointmentOutput2));
 
         // Act
         mockMvc.perform(post("/api/appointments/doctor")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(asJsonString(List.of(input))))
+                        .content(asJsonString(input)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(2)));
 
         // Assert
-        verify(createDoctorAppointmentsUseCase, times(1)).execute(anyList());
+        verify(createDoctorAppointmentsUseCase, times(1)).execute(any(CreateAppointmentInput.class));
     }
 
     @Test
@@ -168,14 +171,15 @@ public class DoctorAppointmentControllerTest {
                 .build();
 
         // Act
-        ResultActions result =      mockMvc.perform(post("/api/appointments/doctor")
+        ResultActions result = mockMvc.perform(post("/api/appointments/doctor")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(asJsonString(List.of(input))))
+                        .content(asJsonString(input)))
                 .andDo(print());
 
         // Assert
-        result.andExpect(status().is5xxServerError())
-                .andExpect(jsonPath("$.message").value("400 BAD_REQUEST \"Validation failure\""));
+        result.andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.message").value("Validation error"))
+                .andExpect(jsonPath("$.fieldErrors.periods").value("must not be empty"));
 
     }
 
@@ -189,7 +193,7 @@ public class DoctorAppointmentControllerTest {
                 .build();
 
         // Act
-        ResultActions result =      mockMvc.perform(delete("/api/appointments/doctor")
+        ResultActions result = mockMvc.perform(delete("/api/appointments/doctor")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(asJsonString(input)))
                 .andDo(print());

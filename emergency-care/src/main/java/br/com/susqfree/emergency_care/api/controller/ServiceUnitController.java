@@ -5,7 +5,7 @@ import br.com.susqfree.emergency_care.api.dto.ServiceUnitOutput;
 import br.com.susqfree.emergency_care.api.mapper.ServiceUnitDtoMapper;
 import br.com.susqfree.emergency_care.domain.usecase.CreateServiceUnitUseCase;
 import br.com.susqfree.emergency_care.domain.usecase.FindServiceUnitByIdUseCase;
-import br.com.susqfree.emergency_care.domain.usecase.ListAllServiceUnitsUseCase;
+import br.com.susqfree.emergency_care.domain.usecase.ListAllServiceUnitsByUnitIdUseCase;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
@@ -21,18 +21,18 @@ public class ServiceUnitController {
 
     private final CreateServiceUnitUseCase createServiceUnitUseCase;
     private final FindServiceUnitByIdUseCase findServiceUnitByIdUseCase;
-    private final ListAllServiceUnitsUseCase listAllServiceUnitsUseCase;
+    private final ListAllServiceUnitsByUnitIdUseCase listAllServiceUnitsByUnitIdUseCase;
     private final ServiceUnitDtoMapper mapper;
 
     public ServiceUnitController(
             CreateServiceUnitUseCase createServiceUnitUseCase,
             FindServiceUnitByIdUseCase findServiceUnitByIdUseCase,
-            ListAllServiceUnitsUseCase listAllServiceUnitsUseCase,
+            ListAllServiceUnitsByUnitIdUseCase listAllServiceUnitsByUnitIdUseCase,
             ServiceUnitDtoMapper mapper
     ) {
         this.createServiceUnitUseCase = createServiceUnitUseCase;
         this.findServiceUnitByIdUseCase = findServiceUnitByIdUseCase;
-        this.listAllServiceUnitsUseCase = listAllServiceUnitsUseCase;
+        this.listAllServiceUnitsByUnitIdUseCase = listAllServiceUnitsByUnitIdUseCase;
         this.mapper = mapper;
     }
 
@@ -53,9 +53,9 @@ public class ServiceUnitController {
     }
 
     @Operation(summary = "List All Service Units", description = "Returns a list of all registered service units")
-    @GetMapping
-    public ResponseEntity<List<ServiceUnitOutput>> findAll() {
-        var units = listAllServiceUnitsUseCase.execute()
+    @GetMapping("/health-unit/{unitId}")
+    public ResponseEntity<List<ServiceUnitOutput>> findAllByUnitId(@PathVariable Long unitId) {
+        var units = listAllServiceUnitsByUnitIdUseCase.execute(unitId)
                 .stream()
                 .map(mapper::toOutput)
                 .toList();

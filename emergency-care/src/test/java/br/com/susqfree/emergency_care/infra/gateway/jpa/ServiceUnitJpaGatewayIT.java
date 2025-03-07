@@ -60,13 +60,13 @@ class ServiceUnitJpaGatewayIT {
     }
 
     @Test
-    void shouldFindAllServiceUnitsSuccessfully() {
+    void shouldFindAllServiceUnitsByUnitIdSuccessfully() {
         serviceUnitRepository.saveAll(List.of(
-                new ServiceUnitEntity(null, "Emergency Unit", 100, 10L),
+                new ServiceUnitEntity(null, "Emergency Unit", 100, 5L),
                 new ServiceUnitEntity(null, "ICU", 50, 5L)
         ));
 
-        List<ServiceUnit> serviceUnits = serviceUnitJpaGateway.findAll();
+        List<ServiceUnit> serviceUnits = serviceUnitJpaGateway.findAllByUnitId(5L);
 
         assertThat(serviceUnits).hasSize(2);
     }

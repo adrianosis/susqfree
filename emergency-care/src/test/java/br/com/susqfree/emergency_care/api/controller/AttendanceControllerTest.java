@@ -176,7 +176,7 @@ class AttendanceControllerTest {
     void shouldCompleteAttendance() throws Exception {
         doNothing().when(completeAttendanceUseCase).execute(eq(1L));
 
-        mockMvc.perform(delete("/attendances/{id}/complete", 1L))
+        mockMvc.perform(put("/attendances/{id}/complete", 1L))
                 .andExpect(status().isNoContent());
 
         verify(completeAttendanceUseCase, times(1)).execute(eq(1L));

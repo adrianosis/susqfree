@@ -7,7 +7,7 @@ import br.com.susqfree.emergency_care.config.exception.GlobalExceptionHandler;
 import br.com.susqfree.emergency_care.domain.model.ServiceUnit;
 import br.com.susqfree.emergency_care.domain.usecase.CreateServiceUnitUseCase;
 import br.com.susqfree.emergency_care.domain.usecase.FindServiceUnitByIdUseCase;
-import br.com.susqfree.emergency_care.domain.usecase.ListAllServiceUnitsUseCase;
+import br.com.susqfree.emergency_care.domain.usecase.ListAllServiceUnitsByUnitIdUseCase;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -39,7 +39,7 @@ class ServiceUnitControllerTest {
     private FindServiceUnitByIdUseCase findServiceUnitByIdUseCase;
 
     @Mock
-    private ListAllServiceUnitsUseCase listAllServiceUnitsUseCase;
+    private ListAllServiceUnitsByUnitIdUseCase listAllServiceUnitsByUnitIdUseCase;
 
     @Mock
     private ServiceUnitDtoMapper mapper;
@@ -53,7 +53,7 @@ class ServiceUnitControllerTest {
         ServiceUnitController controller = new ServiceUnitController(
                 createServiceUnitUseCase,
                 findServiceUnitByIdUseCase,
-                listAllServiceUnitsUseCase,
+                listAllServiceUnitsByUnitIdUseCase,
                 mapper
         );
 
@@ -139,18 +139,18 @@ class ServiceUnitControllerTest {
 
     @Test
     @DisplayName("Deve listar todas as unidades de serviço")
-    void shouldListAllServiceUnits() throws Exception {
+    void shouldListAllServiceUnitsByUnitId() throws Exception {
         ServiceUnit serviceUnit1 = new ServiceUnit(1L, "Emergency Unit", 50, 10L);
         ServiceUnit serviceUnit2 = new ServiceUnit(2L, "General Consultation", 30, 11L);
 
         ServiceUnitOutput output1 = new ServiceUnitOutput(1L, "Emergency Unit", 50, 10L);
         ServiceUnitOutput output2 = new ServiceUnitOutput(2L, "General Consultation", 30, 11L);
 
-        when(listAllServiceUnitsUseCase.execute()).thenReturn(List.of(serviceUnit1, serviceUnit2));
+        when(listAllServiceUnitsByUnitIdUseCase.execute(anyLong())).thenReturn(List.of(serviceUnit1, serviceUnit2));
         when(mapper.toOutput(serviceUnit1)).thenReturn(output1);
         when(mapper.toOutput(serviceUnit2)).thenReturn(output2);
 
-        mockMvc.perform(get("/service-units"))
+        mockMvc.perform(get("/service-units/health-unit/{unitId}", 1L))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.size()").value(2))
                 .andExpect(jsonPath("$[0].id").value(output1.getId()))
@@ -158,6 +158,6 @@ class ServiceUnitControllerTest {
                 .andExpect(jsonPath("$[1].id").value(output2.getId()))
                 .andExpect(jsonPath("$[1].serviceType").value(output2.getServiceType()));
 
-        verify(listAllServiceUnitsUseCase, times(1)).execute();
+        verify(listAllServiceUnitsByUnitIdUseCase, times(1)).execute(anyLong());
     }
 }

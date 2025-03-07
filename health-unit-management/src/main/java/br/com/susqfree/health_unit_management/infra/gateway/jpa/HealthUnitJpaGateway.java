@@ -48,8 +48,8 @@ public class HealthUnitJpaGateway implements HealthUnitGateway {
     }
 
     @Override
-    public List<HealthUnit> findAll() {
-        return repository.findAll()
+    public List<HealthUnit> findAllByCityAndState(String city, String state) {
+        return repository.findAllByCityAndState(city, state)
                 .stream()
                 .map(HealthUnitEntityMapper::toDomain)
                 .collect(Collectors.toList());

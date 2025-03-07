@@ -12,11 +12,11 @@ import org.mockito.MockitoAnnotations;
 
 import java.util.Arrays;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
-class FindAllHealthUnitsUseCaseTest {
-    private FindAllHealthUnitsUseCase findAllHealthUnitsUseCase;
+class FindAllHealthUnitsByCityAndStateUseCaseTest {
+    private FindAllHealthUnitsByCityAndStateUseCase findAllHealthUnitsByCityAndStateUseCase;
 
     @Mock
     private HealthUnitGateway healthUnitGateway;
@@ -26,7 +26,7 @@ class FindAllHealthUnitsUseCaseTest {
     @BeforeEach
     void setup() {
         openMocks = MockitoAnnotations.openMocks(this);
-        findAllHealthUnitsUseCase = new FindAllHealthUnitsUseCase(healthUnitGateway);
+        findAllHealthUnitsByCityAndStateUseCase = new FindAllHealthUnitsByCityAndStateUseCase(healthUnitGateway);
     }
 
     @AfterEach
@@ -36,12 +36,12 @@ class FindAllHealthUnitsUseCaseTest {
     @Test
     void execute() {
         // Arrange
-        var healthUnit1 = HealthUnitHelper.createHealthUnit(1l);
-        var healthUnit2 = HealthUnitHelper.createHealthUnit(2l);
-        when(healthUnitGateway.findAll()).thenReturn(Arrays.asList(healthUnit1, healthUnit2));
+        var healthUnit1 = HealthUnitHelper.createHealthUnit(1L);
+        var healthUnit2 = HealthUnitHelper.createHealthUnit(2L);
+        when(healthUnitGateway.findAllByCityAndState(anyString(), anyString())).thenReturn(Arrays.asList(healthUnit1, healthUnit2));
 
         // Act
-        var healthUnits = findAllHealthUnitsUseCase.execute();
+        var healthUnits = findAllHealthUnitsByCityAndStateUseCase.execute(anyString(), anyString());
 
         // Assert
         Assertions.assertThat(healthUnits)

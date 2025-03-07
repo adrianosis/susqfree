@@ -2,7 +2,6 @@ package br.com.susqfree.health_unit_management.infra.gateway.jpa;
 
 import br.com.susqfree.health_unit_management.domain.model.HealthUnit;
 import br.com.susqfree.health_unit_management.infra.gateway.jpa.entity.HealthUnitEntity;
-import br.com.susqfree.health_unit_management.infra.gateway.jpa.mapper.HealthUnitEntityMapper;
 import br.com.susqfree.health_unit_management.infra.gateway.jpa.repository.HealthUnitRepository;
 import br.com.susqfree.health_unit_management.utils.HealthUnitHelper;
 import jakarta.persistence.EntityNotFoundException;
@@ -116,16 +115,16 @@ class HealthUnitJpaGatewayTest {
     }
 
     @Test
-    void shouldFindAllHealthUnits() {
+    void shouldFindAllHealthUnitsByCityAndState() {
         // Arrange
         HealthUnitEntity healthUnitEntity = HealthUnitHelper.createHealthUnitEntity(1L);
-        when(repository.findAll()).thenReturn(List.of(healthUnitEntity));
+        when(repository.findAllByCityAndState(anyString(), anyString())).thenReturn(List.of(healthUnitEntity));
 
         // Act
-        List<HealthUnit> result = healthUnitJpaGateway.findAll();
+        List<HealthUnit> result = healthUnitJpaGateway.findAllByCityAndState(anyString(), anyString());
 
         // Assert
-        verify(repository, times(1)).findAll();
+        verify(repository, times(1)).findAllByCityAndState(anyString(), anyString());
         assertThat(result).isNotEmpty();
     }
 }

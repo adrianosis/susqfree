@@ -1,0 +1,25 @@
+version: '3.8'
+
+services:
+  mongo_db_dev:
+    image: mongo
+    container_name: fiap_mongo_db_dev
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: 123456
+      MONGO_INITDB_DATABASE: schedule_management
+    volumes:
+      - ./mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+    ports:
+      - "27017:27017"
+
+  postgres_db_dev:
+    image: postgres:latest
+    volumes:
+      - ./postgres-init.sql:/docker-entrypoint-initdb.d/init.sql
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 123456
+      POSTGRES_DB: default_database
+    ports:
+      - "5432:5432"

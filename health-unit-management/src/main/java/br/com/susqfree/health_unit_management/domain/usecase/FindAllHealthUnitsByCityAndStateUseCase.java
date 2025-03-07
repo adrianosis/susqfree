@@ -11,12 +11,12 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-public class FindAllHealthUnitsUseCase {
+public class FindAllHealthUnitsByCityAndStateUseCase {
 
     private final HealthUnitGateway healthUnitGateway;
 
-    public List<HealthUnitOutput> execute() {
-        return healthUnitGateway.findAll()
+    public List<HealthUnitOutput> execute(String city, String state) {
+        return healthUnitGateway.findAllByCityAndState(city, state)
                 .stream()
                 .map(HealthUnitMapper::toOutput)
                 .collect(Collectors.toList());

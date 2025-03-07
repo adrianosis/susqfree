@@ -39,15 +39,15 @@ public class DoctorAppointmentController {
                             examples = @ExampleObject(
                                     name = "Example of appointments Create",
                                     summary = "Example request body for create a appointments",
-                                    value = "[{\"doctorId\":1,\"healthUnitId\":1,\"specialtyId\":1,\"startDateTime\":\"2025-02-24T08:00:00\",\"endDateTime\":\"2025-02-24T12:00:00\"}]"
+                                    value = "{\"doctorId\":1,\"healthUnitId\":1,\"specialtyId\":1,\"periods\": [[{\"startDateTime\":\"2025-02-24T08:00:00\",\"endDateTime\":\"2025-02-24T12:00:00\"}]}"
                             )
                     )
             )
     )
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<List<AppointmentOutput>> createDoctorAppointments(@RequestBody @Valid List<CreateAppointmentInput> inputs) {
-        var output = createDoctorAppointmentsUseCase.execute(inputs);
+    public ResponseEntity<List<AppointmentOutput>> createDoctorAppointments(@RequestBody @Valid CreateAppointmentInput input) {
+        var output = createDoctorAppointmentsUseCase.execute(input);
 
         return ResponseEntity.ok(output);
     }
@@ -77,9 +77,9 @@ public class DoctorAppointmentController {
     @Operation(summary = "Find All Appointments by Doctor ID and Period", description = "Retrieve all appointments by Doctor ID and Period")
     @GetMapping("/{doctorId}")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<List<AppointmentOutput>> cancelDoctorAppointments(@PathVariable long doctorId,
-                                                                            @RequestParam LocalDateTime startDateTime,
-                                                                            @RequestParam LocalDateTime endDateTime) {
+    public ResponseEntity<List<AppointmentOutput>> findAppointmentsByDoctorId(@PathVariable long doctorId,
+                                                                              @RequestParam LocalDateTime startDateTime,
+                                                                              @RequestParam LocalDateTime endDateTime) {
         var output = findAppointmentsByDoctorUseCase.execute(doctorId, startDateTime, endDateTime);
 
         return ResponseEntity.ok(output);

@@ -50,7 +50,7 @@ public class SecurityConfiguration {
                 return new JwtAuthenticationToken(jwt, List.of());
             }
             List<GrantedAuthority> grantedAuthorities = authorities.stream()
-                    .map(authority -> new SimpleGrantedAuthority(authority.toUpperCase()))
+                    .map(authority -> new SimpleGrantedAuthority("ROLE_" + authority.toUpperCase()))
                     .collect(Collectors.toList());
 
             return new JwtAuthenticationToken(jwt, grantedAuthorities);
